@@ -307,7 +307,7 @@ if (isset($_POST['register'])) {
             } catch (Exception $e) {
                 echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
             }
-            $message = "For receiving comics, please click on the link received in your email.";
+            $message = "For receiving comics, please click on the link received on your email.";
         }
     } 
 
