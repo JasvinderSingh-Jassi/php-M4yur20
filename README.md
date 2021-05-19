@@ -1,2 +1,2 @@
-#rtlearn PHP ASSIGNMENT
-##1.Email a random XKCD challenge
+# rtlearn PHP ASSIGNMENT
+## 1.Email a random XKCD challenge
