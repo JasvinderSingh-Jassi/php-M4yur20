@@ -25,7 +25,7 @@ $comic_id=rand(1,2462);
     // Decode JSON data into PHP array
     $comic_data = json_decode($json_data);
 
-    $comic_body = str_replace(array( '(', ')', '[[', ']]', '{{', '}}', 'alt', '"..."', '...' ), '[', ']', $comic_data->transcript);
+    $comic_body = str_replace(array( '(', ')', '[[', ']]', '{{', '}}', 'alt', '"..."', '...' ), '', $comic_data->transcript);
 	$mail->isHTML(true);								
 	$mail->Subject = 'Your Comic ['.$comic_data->safe_title.'] is here!';
     $month = $comic_data->month;

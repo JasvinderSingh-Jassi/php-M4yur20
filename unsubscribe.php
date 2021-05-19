@@ -8,12 +8,12 @@ if (isset($_POST['email'])) {
     $result = $conn->query($sql);
     $row = $result->fetch_assoc();
 
-    if ($row['is_subscribed'] == '0') {
+    if ($row['is_active'] == '0') {
       header('Location: unsubsuccess.php');
     } 
 
-    if ($row['is_subscribed'] == '1') {
-        $usql = "UPDATE users SET is_subscribed = '0' WHERE email = '$email'";
+    if ($row['is_active'] == '1') {
+        $usql = "UPDATE users SET is_active = '0' WHERE email = '$email'";
         $uresult = $conn->query($usql);
         header('Location: unsubsuccess.php');
     } 
@@ -149,7 +149,7 @@ td,
                   	</div>
                   </form>
                   <br>
-                  <a href="https://safe-wildwood-84928.herokuapp.com">« Return to our website</a>
+                  <a href="https://calm-atoll-98225.herokuapp.com/">« Return to our website</a>
                 </div>
               </td>
             </tr>

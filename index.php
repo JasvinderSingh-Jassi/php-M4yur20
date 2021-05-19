@@ -627,12 +627,12 @@ if (isset($_POST['register'])) {
             </form>
         </div>
 
-        <p id="snackbar">
+        <div id="snackbar">
             <?php if(!empty($message)) {
                 echo $message;
              }
              ?>
-        </p>
+        </div>
 
         <script>
             function myFunction() {
