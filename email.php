@@ -25,7 +25,7 @@ $comic_id=rand(1,2462);
     // Decode JSON data into PHP array
     $comic_data = json_decode($json_data);
 
-    $comic_body = str_replace(array( '(', ')', '[[', ']]', '{{', '}}', 'alt', '"..."', '...' ), '', $comic_data->transcript);
+    $comic_body = str_replace(array( '(', ')', '[[', ']]', '{{', '}}', 'alt', '"..."', '...' ), '[', ']', $comic_data->transcript);
 	$mail->isHTML(true);								
 	$mail->Subject = 'Your Comic ['.$comic_data->safe_title.'] is here!';
     $month = $comic_data->month;
@@ -124,7 +124,7 @@ foreach($emails as $email){
         </div>
         </div>
         <div style="margin-left:13px;">If you would prefer not to receive comics in future from us
-        <a href="https://safe-wildwood-84928.herokuapp.com/unsubscribe.php?email='.$email.'" style="color:red">unsubscribe here.</a></div>
+        <a href="https://calm-atoll-98225.herokuapp.com/unsubscribe.php?email='.$email.'" style="color:red">unsubscribe here.</a></div>
         </body>
         </html>
         

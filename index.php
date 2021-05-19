@@ -273,7 +273,7 @@ if (isset($_POST['register'])) {
                                               <table border="0" cellpadding="0" cellspacing="0">
                                                 <tbody>
                                                   <tr>
-                                                    <td> <a href="http://localhost:8000/emailverify.php?email='.$email.'&hash='.$hash.'" target="_blank">confirm email</a> </td>
+                                                    <td> <a href="https://calm-atoll-98225.herokuapp.com/emailverify.php?email='.$email.'&hash='.$hash.'" target="_blank">confirm email</a> </td>
                                                   </tr>
                                                 </tbody>
                                               </table>
@@ -567,7 +567,7 @@ if (isset($_POST['register'])) {
                                               <table border="0" cellpadding="0" cellspacing="0">
                                                 <tbody>
                                                   <tr>
-                                                    <td> <a href="http://localhost:8000/emailverify.php?email='.$email.'&hash='.$hash.'" target="_blank">confirm email</a> </td>
+                                                    <td> <a href="https://calm-atoll-98225.herokuapp.com/emailverify.php?email='.$email.'&hash='.$hash.'" target="_blank">confirm email</a> </td>
                                                   </tr>
                                                 </tbody>
                                               </table>
