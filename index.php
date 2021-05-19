@@ -12,18 +12,20 @@ if (isset($_POST['register'])) {
     $sql = "SELECT * FROM users WHERE email='$email'";
     $result = $conn->query($sql);
 
-    
     if ($result->num_rows >= 1) {
         $row = $result->fetch_assoc();
-        if($row['is_subscribed']=='1'){
+        if($row['is_active']=='1'){
             $message="Email Id is already registered and active for receiving comics.";
         }
         else{
+            $hash = md5( rand(0,1000) );
+            $sql = "UPDATE users SET hash = '$hash' WHERE email = '$email'";
+            $result = $conn->query($sql);
             $mail = new PHPMailer(true); 
             $mail->isHTML(true);								
-	        $mail->Subject = 'Re-verify your account!';
+	          $mail->Subject = 'Re-verify your account!';
             try {
-                $mail->SMTPDebug = 2;									
+                $mail->SMTPDebug = -1;									
                 $mail->isSMTP();											
                 $mail->Host	 = 'smtp.gmail.com;';					
                 $mail->SMTPAuth = true;							
@@ -37,8 +39,264 @@ if (isset($_POST['register'])) {
                 $mail->addAddress($email);
                 
                 $emessage = '
-                
-                
+                    
+                <html>
+                <head>
+                  <meta name="viewport" content="width=device-width" />
+                  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+                  <style>
+                    img {
+                      border: none;
+                      -ms-interpolation-mode: bicubic;
+                      max-width: 100%; }
+                    body {
+                      background-color: #f6f6f6;
+                      font-family: sans-serif;
+                      -webkit-font-smoothing: antialiased;
+                      font-size: 14px;
+                      line-height: 1.4;
+                      margin: 0;
+                      padding: 0; 
+                      -ms-text-size-adjust: 100%;
+                      -webkit-text-size-adjust: 100%; }
+                    table {
+                      border-collapse: separate;
+                      mso-table-lspace: 0pt;
+                      mso-table-rspace: 0pt;
+                      width: 100%; }
+                      table td {
+                        font-family: sans-serif;
+                        font-size: 14px;
+                        vertical-align: top; }
+                    .body {
+                      background-color: #f6f6f6;
+                      width: 100%; }
+                    .container {
+                      display: block;
+                      Margin: 0 auto !important;
+                      max-width: 580px;
+                      padding: 10px;
+                      width: 580px; }
+                    .content {
+                      box-sizing: border-box;
+                      display: block;
+                      Margin: 0 auto;
+                      max-width: 580px;
+                      padding: 10px; }
+                    .main {
+                      background: #fff;
+                      border-radius: 3px;
+                      width: 100%; }
+                    .wrapper {
+                      box-sizing: border-box;
+                      padding: 20px; }
+                    .footer {
+                      clear: both;
+                      padding-top: 10px;
+                      text-align: center;
+                      width: 100%; }
+                      .footer td,
+                      .footer p,
+                      .footer span,
+                      .footer a {
+                        color: #999999;
+                        font-size: 12px;
+                        text-align: center; }
+                    h1,
+                    h2,
+                    h3,
+                    h4 {
+                      color: #000000;
+                      font-family: sans-serif;
+                      font-weight: 400;
+                      line-height: 1.4;
+                      margin: 0;
+                      Margin-bottom: 30px; }
+                    h1 {
+                      font-size: 35px;
+                      font-weight: 300;
+                      text-align: center;
+                      text-transform: capitalize; }
+                    p,
+                    ul,
+                    ol {
+                      font-family: sans-serif;
+                      font-size: 14px;
+                      font-weight: normal;
+                      margin: 0;
+                      Margin-bottom: 15px; }
+                      p li,
+                      ul li,
+                      ol li {
+                        list-style-position: inside;
+                        margin-left: 5px; }
+                    a {
+                      color: #3498db;
+                      text-decoration: underline; }
+                    .btn {
+                      box-sizing: border-box;
+                      width: 100%; }
+                      .btn > tbody > tr > td {
+                        padding-bottom: 15px; }
+                      .btn table {
+                        width: auto; }
+                      .btn table td {
+                        background-color: #ffffff;
+                        border-radius: 5px;
+                        text-align: center; }
+                      .btn a {
+                        background-color: #ffffff;
+                        border: solid 1px #3498db;
+                        border-radius: 5px;
+                        box-sizing: border-box;
+                        color: #3498db;
+                        cursor: pointer;
+                        display: inline-block;
+                        font-size: 14px;
+                        font-weight: bold;
+                        margin: 0;
+                        padding: 12px 25px;
+                        text-decoration: none;
+                        text-transform: capitalize; }
+                    .btn-primary table td {
+                      background-color: #3498db; }
+                    .btn-primary a {
+                      background-color: #3498db;
+                      border-color: #3498db;
+                      color: #ffffff; }
+                    .last {
+                      margin-bottom: 0; }
+                    .first {
+                      margin-top: 0; }
+                    .align-center {
+                      text-align: center; }
+                    .align-right {
+                      text-align: right; }
+                    .align-left {
+                      text-align: left; }
+                    .clear {
+                      clear: both; }
+                    .mt0 {
+                      margin-top: 0; }
+                    .mb0 {
+                      margin-bottom: 0; }
+                    .preheader {
+                      color: transparent;
+                      display: none;
+                      height: 0;
+                      max-height: 0;
+                      max-width: 0;
+                      opacity: 0;
+                      overflow: hidden;
+                      mso-hide: all;
+                      visibility: hidden;
+                      width: 0; }
+                    .powered-by a {
+                      text-decoration: none; }
+                    hr {
+                      border: 0;
+                      border-bottom: 1px solid #f6f6f6;
+                      Margin: 20px 0; }
+                    @media only screen and (max-width: 620px) {
+                      table[class=body] h1 {
+                        font-size: 28px !important;
+                        margin-bottom: 10px !important; }
+                      table[class=body] p,
+                      table[class=body] ul,
+                      table[class=body] ol,
+                      table[class=body] td,
+                      table[class=body] span,
+                      table[class=body] a {
+                        font-size: 16px !important; }
+                      table[class=body] .wrapper,
+                      table[class=body] .article {
+                        padding: 10px !important; }
+                      table[class=body] .content {
+                        padding: 0 !important; }
+                      table[class=body] .container {
+                        padding: 0 !important;
+                        width: 100% !important; }
+                      table[class=body] .main {
+                        border-left-width: 0 !important;
+                        border-radius: 0 !important;
+                        border-right-width: 0 !important; }
+                      table[class=body] .btn table {
+                        width: 100% !important; }
+                      table[class=body] .btn a {
+                        width: 100% !important; }
+                      table[class=body] .img-responsive {
+                        height: auto !important;
+                        max-width: 100% !important;
+                        width: auto !important; }}
+                    @media all {
+                      .ExternalClass {
+                        width: 100%; }
+                      .ExternalClass,
+                      .ExternalClass p,
+                      .ExternalClass span,
+                      .ExternalClass font,
+                      .ExternalClass td,
+                      .ExternalClass div {
+                        line-height: 100%; }
+                      .apple-link a {
+                        color: inherit !important;
+                        font-family: inherit !important;
+                        font-size: inherit !important;
+                        font-weight: inherit !important;
+                        line-height: inherit !important;
+                        text-decoration: none !important; } 
+                      .btn-primary table td:hover {
+                        background-color: #34495e !important; }
+                      .btn-primary a:hover {
+                        background-color: #34495e !important;
+                        border-color: #34495e !important; } }
+                  </style>
+                </head>
+                <body class="">
+                  <table border="0" cellpadding="0" cellspacing="0" class="body">
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td class="container">
+                        <div class="content">
+                          <table class="main">
+                            <tr>
+                              <td class="wrapper">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                  <tr>
+                                    <td>
+                                      <h1>Confirm your email</h1>
+                                      <h2 align="center">You are just one step away</h2>
+                                      <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                                        <tbody>
+                                          <tr>
+                                            <td align="center">
+                                              <table border="0" cellpadding="0" cellspacing="0">
+                                                <tbody>
+                                                  <tr>
+                                                    <td> <a href="http://localhost:8000/emailverify.php?email='.$email.'&hash='.$hash.'" target="_blank">confirm email</a> </td>
+                                                  </tr>
+                                                </tbody>
+                                              </table>
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                      <p>If you received this email by mistake, simply delete it. You will not be subscribed if you do not click the confirmation link above.</p>
+                    
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
+              
+                          </table>
+                        </div>
+                      </td>
+                      <td>&nbsp;</td>
+                    </tr>
+                  </table>
+                </body>
+              </html>
 
                 ';
         
@@ -49,228 +307,267 @@ if (isset($_POST['register'])) {
             } catch (Exception $e) {
                 echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
             }
-            $message = "For re-activation, please click on the link received on your email for re-verification.";
+            $message = "For receiving comics, please click on the link received in your email.";
         }
     } 
 
     else {
         $hash = md5( rand(0,1000) );
-        $mail = new PHPMailer(true); 
-        $mail->isHTML(true);								
-        $mail->Subject = 'Confirm your Email';
-        try {
-            $mail->SMTPDebug = -1;									
-            $mail->isSMTP();											
-            $mail->Host	 = 'smtp.gmail.com;';					
-            $mail->SMTPAuth = true;							
-            $mail->Username = 'mayuragarwalrtcampassignment@gmail.com';				
-            $mail->Password = '8879492968';						
-            $mail->SMTPSecure = 'tls';							
-            $mail->Port	 = 587;
-    
-            $mail->setFrom('mayuragarwalrtcampassignment@gmail.com', 'Mayur Agarwal');	
-    
-            $mail->addAddress($email);
-            
-            $emessage = '
-            <html>
-            
-            <head>
-              <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-              <style type="text/css">
-            
-                #outlook a {
-                  padding: 0;
-                }
-            
-
-            
-                .ReadMsgBody {
-                  width: 100%;
-                }
-            
-                .ExternalClass {
-                  width: 100%;
-                }
-            
-                /* Force HM to display emails at full width */
-            
-                .ExternalClass,
-                .ExternalClass p,
-                .ExternalClass span,
-                .ExternalClass font,
-                .ExternalClass td,
-                .ExternalClass div {
-                  line-height: 100%;
-                }
-            
-                /* Force HM to display normal line spacing */
-            
-                body,
-                table,
-                td,
-                p,
-                a,
-                li,
-                blockquote {
-                  -webkit-text-size-adjust: 100%;
-                  -ms-text-size-adjust: 100%;
-                }
-            
-                /* Prevent WebKit and Windows mobile changing default text sizes */
-            
-                table,
-                td {
-                  mso-table-lspace: 0pt;
-                  mso-table-rspace: 0pt;
-                }
-            
-                /* Remove spacing between tables in Outlook 2007 and up */
-            
-                img {
-                  -ms-interpolation-mode: bicubic;
-                }
-            
-                /* Allow smoother rendering of resized image in Internet Explorer */
-            
-                /* RESET STYLES */
-            
-                body {
-                  margin: 0;
-                  padding: 0;
-                }
-            
-                img {
-                  border: 0 none;
-                  height: auto;
-                  line-height: 100%;
-                  outline: none;
-                  text-decoration: none;
-                }
-            
-                a img {
-                  border: 0 none;
-                }
-            
-                .imageFix {
-                  display: block;
-                }
-            
-                table,
-                td {
-                  border-collapse: collapse;
-                }
-            
-                #bodyTable {
-                  height: 100% !important;
-                  margin: 0;
-                  padding: 0;
-                  width: 100% !important;
-                }
-            
-                #footer a {
-                  color: #00a4bd;
-                  text-decoration: none;
-                }
-            
-                /* Responsive Styles */
-            
-                @media only screen and (max-width: 480px) {
-                  .responsiveRow {
-                    width: 100% !important;
-                  }
-                  .responsiveColumn {
-                    display: block !important;
-                    width: 100% !important;
-                  }
-                }
-              </style>
-              <!--[if mso]><style type="text/css">body, table, td {
-              font-family: Helvetica Neue, Avenir Next, Arial, Helvetica, sans-serif !important;
-            }</style><![endif]-->
-            </head>
-            
-            <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" bgcolor="#f5f8fa" style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; margin: 0; padding: 0; font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 16px; height: 100%; width: 100%; min-width: 100%;">
-              <table id="outerWrapper" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" bgcolor="#f5f8fa" style="font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 16px; color: #425b76; line-height: 1.5; width: 100%; min-width: 100%; background-color:#f5f8fa;">
-                <tbody>
-                  <tr>
-                    <td align="center" valign="top">
-                      <table border="0" cellpadding="20" cellspacing="0" width="600" style="width: 600px;" class="emailContainer">
-                        <tbody>
-                          <tr>
-                            <td align="center" valign="top" width="100%" style="width: 100%; min-width: 100%;">
-                              <table cellpadding="12" border="0" cellspacing="0" width="100%" bgcolor="#ff7a59" style="width: 100%; min-width:100%;">
-                                <tbody>
+        $sql = "INSERT INTO users(`email`, `hash`) VALUES ('$email','$hash')";
+        $result = $conn->query($sql);
+        if($result){
+          $mail = new PHPMailer(true); 
+          $mail->isHTML(true);								
+          $mail->Subject = 'Confirm your Email';
+          try {
+              $mail->SMTPDebug = -1;									
+              $mail->isSMTP();											
+              $mail->Host	 = 'smtp.gmail.com;';					
+              $mail->SMTPAuth = true;							
+              $mail->Username = 'mayuragarwalrtcampassignment@gmail.com';				
+              $mail->Password = '8879492968';						
+              $mail->SMTPSecure = 'tls';							
+              $mail->Port	 = 587;
+      
+              $mail->setFrom('mayuragarwalrtcampassignment@gmail.com', 'Mayur Agarwal');	
+      
+              $mail->addAddress($email);
+              
+              $emessage = '
+              <html>
+                <head>
+                  <meta name="viewport" content="width=device-width" />
+                  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+                  <style>
+                    img {
+                      border: none;
+                      -ms-interpolation-mode: bicubic;
+                      max-width: 100%; }
+                    body {
+                      background-color: #f6f6f6;
+                      font-family: sans-serif;
+                      -webkit-font-smoothing: antialiased;
+                      font-size: 14px;
+                      line-height: 1.4;
+                      margin: 0;
+                      padding: 0; 
+                      -ms-text-size-adjust: 100%;
+                      -webkit-text-size-adjust: 100%; }
+                    table {
+                      border-collapse: separate;
+                      mso-table-lspace: 0pt;
+                      mso-table-rspace: 0pt;
+                      width: 100%; }
+                      table td {
+                        font-family: sans-serif;
+                        font-size: 14px;
+                        vertical-align: top; }
+                    .body {
+                      background-color: #f6f6f6;
+                      width: 100%; }
+                    .container {
+                      display: block;
+                      Margin: 0 auto !important;
+                      max-width: 580px;
+                      padding: 10px;
+                      width: 580px; }
+                    .content {
+                      box-sizing: border-box;
+                      display: block;
+                      Margin: 0 auto;
+                      max-width: 580px;
+                      padding: 10px; }
+                    .main {
+                      background: #fff;
+                      border-radius: 3px;
+                      width: 100%; }
+                    .wrapper {
+                      box-sizing: border-box;
+                      padding: 20px; }
+                    .footer {
+                      clear: both;
+                      padding-top: 10px;
+                      text-align: center;
+                      width: 100%; }
+                      .footer td,
+                      .footer p,
+                      .footer span,
+                      .footer a {
+                        color: #999999;
+                        font-size: 12px;
+                        text-align: center; }
+                    h1,
+                    h2,
+                    h3,
+                    h4 {
+                      color: #000000;
+                      font-family: sans-serif;
+                      font-weight: 400;
+                      line-height: 1.4;
+                      margin: 0;
+                      Margin-bottom: 30px; }
+                    h1 {
+                      font-size: 35px;
+                      font-weight: 300;
+                      text-align: center;
+                      text-transform: capitalize; }
+                    p,
+                    ul,
+                    ol {
+                      font-family: sans-serif;
+                      font-size: 14px;
+                      font-weight: normal;
+                      margin: 0;
+                      Margin-bottom: 15px; }
+                      p li,
+                      ul li,
+                      ol li {
+                        list-style-position: inside;
+                        margin-left: 5px; }
+                    a {
+                      color: #3498db;
+                      text-decoration: underline; }
+                    .btn {
+                      box-sizing: border-box;
+                      width: 100%; }
+                      .btn > tbody > tr > td {
+                        padding-bottom: 15px; }
+                      .btn table {
+                        width: auto; }
+                      .btn table td {
+                        background-color: #ffffff;
+                        border-radius: 5px;
+                        text-align: center; }
+                      .btn a {
+                        background-color: #ffffff;
+                        border: solid 1px #3498db;
+                        border-radius: 5px;
+                        box-sizing: border-box;
+                        color: #3498db;
+                        cursor: pointer;
+                        display: inline-block;
+                        font-size: 14px;
+                        font-weight: bold;
+                        margin: 0;
+                        padding: 12px 25px;
+                        text-decoration: none;
+                        text-transform: capitalize; }
+                    .btn-primary table td {
+                      background-color: #3498db; }
+                    .btn-primary a {
+                      background-color: #3498db;
+                      border-color: #3498db;
+                      color: #ffffff; }
+                    .last {
+                      margin-bottom: 0; }
+                    .first {
+                      margin-top: 0; }
+                    .align-center {
+                      text-align: center; }
+                    .align-right {
+                      text-align: right; }
+                    .align-left {
+                      text-align: left; }
+                    .clear {
+                      clear: both; }
+                    .mt0 {
+                      margin-top: 0; }
+                    .mb0 {
+                      margin-bottom: 0; }
+                    .preheader {
+                      color: transparent;
+                      display: none;
+                      height: 0;
+                      max-height: 0;
+                      max-width: 0;
+                      opacity: 0;
+                      overflow: hidden;
+                      mso-hide: all;
+                      visibility: hidden;
+                      width: 0; }
+                    .powered-by a {
+                      text-decoration: none; }
+                    hr {
+                      border: 0;
+                      border-bottom: 1px solid #f6f6f6;
+                      Margin: 20px 0; }
+                    @media only screen and (max-width: 620px) {
+                      table[class=body] h1 {
+                        font-size: 28px !important;
+                        margin-bottom: 10px !important; }
+                      table[class=body] p,
+                      table[class=body] ul,
+                      table[class=body] ol,
+                      table[class=body] td,
+                      table[class=body] span,
+                      table[class=body] a {
+                        font-size: 16px !important; }
+                      table[class=body] .wrapper,
+                      table[class=body] .article {
+                        padding: 10px !important; }
+                      table[class=body] .content {
+                        padding: 0 !important; }
+                      table[class=body] .container {
+                        padding: 0 !important;
+                        width: 100% !important; }
+                      table[class=body] .main {
+                        border-left-width: 0 !important;
+                        border-radius: 0 !important;
+                        border-right-width: 0 !important; }
+                      table[class=body] .btn table {
+                        width: 100% !important; }
+                      table[class=body] .btn a {
+                        width: 100% !important; }
+                      table[class=body] .img-responsive {
+                        height: auto !important;
+                        max-width: 100% !important;
+                        width: auto !important; }}
+                    @media all {
+                      .ExternalClass {
+                        width: 100%; }
+                      .ExternalClass,
+                      .ExternalClass p,
+                      .ExternalClass span,
+                      .ExternalClass font,
+                      .ExternalClass td,
+                      .ExternalClass div {
+                        line-height: 100%; }
+                      .apple-link a {
+                        color: inherit !important;
+                        font-family: inherit !important;
+                        font-size: inherit !important;
+                        font-weight: inherit !important;
+                        line-height: inherit !important;
+                        text-decoration: none !important; } 
+                      .btn-primary table td:hover {
+                        background-color: #34495e !important; }
+                      .btn-primary a:hover {
+                        background-color: #34495e !important;
+                        border-color: #34495e !important; } }
+                  </style>
+                </head>
+                <body class="">
+                  <table border="0" cellpadding="0" cellspacing="0" class="body">
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td class="container">
+                        <div class="content">
+                          <table class="main">
+                            <tr>
+                              <td class="wrapper">
+                                <table border="0" cellpadding="0" cellspacing="0">
                                   <tr>
-                                    <td align="center" valign="middle" width="100%" style="background: linear-gradient(to right, #ff7a59 0%, #ff8f59 100%); width: 100%; padding: 20px; min-width:100%; color: #ffffff"><img src="" alt="HubSpot" width="120" height="35" style="width: 120px; height: 35px; vertical-align: middle; clear: both; width: auto; max-width: 100%;">
-                                      <span
-                                        style="-webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; color: transparent; background: none; user-select: none; -moz-user-select: none; -ms-user-select:none; -webkit-user-select:none; text-overflow: ellipsis; opacity: 0; width:100%; min-width: 100%; height:1; overlfow:hidden; margin: -1px 0 0 0; padding:0; font-size: 0;">
-                                      &nbsp;</span>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                              <table id="backgroundTable" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" bgcolor="#ffffff" style="width: 100%; min-width: 100%;">
-                                <tbody>
-                                  <tr>
-                                    <td align="left" valign="top" style="font-size: 16px; padding: 0 50px">
-                                      <table cellpadding="0" border="0" cellspacing="0" width="100%" style="color: #425b76; background-color: ; font-size: 20px; width: 100%; margin: initial; min-width: 100%; ">
-                                        <tbody>
-                                          <tr>
-                                            <td align="center" valign="middle" style="padding: 0; ">
-                                              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 0; height: 50px; width: 100%; min-width: 100%; line-height: 0;">
-                                                <tbody>
-                                                  <tr>
-                                                    <td height="50"><span style="-webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; color: transparent; background: none; user-select: none; -moz-user-select: none; -ms-user-select:none; -webkit-user-select:none; text-overflow: ellipsis; opacity: 0; width:100%; min-width: 100%; height:1; overlfow:hidden; margin: -1px 0 0 0; padding:0; font-size: 0;"> &nbsp;</span></td>
-                                                  </tr>
-                                                </tbody>
-                                              </table><img src="https://static.hsappstatic.net/EmailNotificationSharedAssets/ex/email-forwarding.png" style="max-width: 150px">
-                                              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 0; height: 20px; width: 100%; min-width: 100%; line-height: 0;">
-                                                <tbody>
-                                                  <tr>
-                                                    <td height="20"><span style="-webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; color: transparent; background: none; user-select: none; -moz-user-select: none; -ms-user-select:none; -webkit-user-select:none; text-overflow: ellipsis; opacity: 0; width:100%; min-width: 100%; height:1; overlfow:hidden; margin: -1px 0 0 0; padding:0; font-size: 0;"> &nbsp;</span></td>
-                                                  </tr>
-                                                </tbody>
-                                              </table>
-                                              <h1 style="font-size: 24px; font-weight: 600; margin: 0; text-align: center">Please confirm your email address</h1>
-                                              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 0; height: 30px; width: 100%; min-width: 100%; line-height: 0;">
-                                                <tbody>
-                                                  <tr>
-                                                    <td height="30"><span style="-webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; color: transparent; background: none; user-select: none; -moz-user-select: none; -ms-user-select:none; -webkit-user-select:none; text-overflow: ellipsis; opacity: 0; width:100%; min-width: 100%; height:1; overlfow:hidden; margin: -1px 0 0 0; padding:0; font-size: 0;"> &nbsp;</span></td>
-                                                  </tr>
-                                                </tbody>
-                                              </table>
-                                              <hr style="height: 1px; color: #eaf0f6; background-color: #eaf0f6; border: none; margin: 0px; padding: 0px;">
-                                              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 0; height: 30px; width: 100%; min-width: 100%; line-height: 0;">
-                                                <tbody>
-                                                  <tr>
-                                                    <td height="30"><span style="-webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; color: transparent; background: none; user-select: none; -moz-user-select: none; -ms-user-select:none; -webkit-user-select:none; text-overflow: ellipsis; opacity: 0; width:100%; min-width: 100%; height:1; overlfow:hidden; margin: -1px 0 0 0; padding:0; font-size: 0;"> &nbsp;</span></td>
-                                                  </tr>
-                                                </tbody>
-                                              </table>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table><span style="font-weight: 600"> <i18n-string data-key="account.verifyUserEmailAddress.ifNewSignupText" data-locale-at-render="en-us">Thanks for signing up for receiving free comics, We’re happy to have you.</i18n-string> </span>
-                                      <p style="margin: 0">
-                                        <i18n-string data-key="account.verifyUserEmailAddress.bodyText" data-locale-at-render="en-us">Please take a second to make sure we have your correct email address.</i18n-string>
-                                      </p>
-                                      <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 0; height: 50px; width: 100%; min-width: 100%; line-height: 0;">
-                                        <tbody>
-                                          <tr>
-                                            <td height="50"><span style="-webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; color: transparent; background: none; user-select: none; -moz-user-select: none; -ms-user-select:none; -webkit-user-select:none; text-overflow: ellipsis; opacity: 0; width:100%; min-width: 100%; height:1; overlfow:hidden; margin: -1px 0 0 0; padding:0; font-size: 0;"> &nbsp;</span></td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <td>
+                                      <h1>Confirm your email</h1>
+                                      <h2 align="center">You are just one step away</h2>
+                                      <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                                         <tbody>
                                           <tr>
                                             <td align="center">
-                                              <table border="0" cellspacing="0" cellpadding="0">
+                                              <table border="0" cellpadding="0" cellspacing="0">
                                                 <tbody>
                                                   <tr>
-                                                    <td align="center" style="border-radius: 3px;" bgcolor="#425b76" width="auto"><a href="yaha pe"
-                                                        target="_blank" style="border: 1px solid #425b76; border-radius: 3px; color: #FFFFFF; display: inline-block; font-size: 14px; font-weight: 500; line-height: 1; padding: 12px 20px; text-decoration: none; width: auto; min-width: 170px; white-space: nowrap; ">Confirm your email address</a></td>
+                                                    <td> <a href="http://localhost:8000/emailverify.php?email='.$email.'&hash='.$hash.'" target="_blank">confirm email</a> </td>
                                                   </tr>
                                                 </tbody>
                                               </table>
@@ -278,88 +575,36 @@ if (isset($_POST['register'])) {
                                           </tr>
                                         </tbody>
                                       </table>
-                                      <div itemscope itemtype="http://schema.org/EmailMessage">
-                                        <div itemprop="potentialAction" itemscope itemtype="http://schema.org/ViewAction">
-                                          <link itemprop="target" href="https://app.hubspot.com/verify?u=matthew@fathomanddraft.com&amp;t=GS9W_PGY96UmfKORtn3bAYwx65_Ut5sDWEblVD6vmC2u3RJOe063BDGxcvBPBGTC&amp;i=8092426">
-                                          <meta itemprop="name" content="Confirm your email address">
-                                        </div>
-                                        <meta itemprop="description" content="Confirm your email address">
-                                      </div>
-                                      <div itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-                                        <meta itemprop="name" content="HubSpot">
-                                        <link itemprop="url" content="https://www.hubspot.com">
-                                        <link itemprop="url/googlePlus" content="https://plus.google.com/+hubspot/">
-                                      </div>
-                                      <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 0; height: 20px; width: 100%; min-width: 100%; line-height: 0;">
-                                        <tbody>
-                                          <tr>
-                                            <td height="20"><span style="-webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; color: transparent; background: none; user-select: none; -moz-user-select: none; -ms-user-select:none; -webkit-user-select:none; text-overflow: ellipsis; opacity: 0; width:100%; min-width: 100%; height:1; overlfow:hidden; margin: -1px 0 0 0; padding:0; font-size: 0;"> &nbsp;</span></td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                      <table cellpadding="0" border="0" cellspacing="0" width="100%" style="color: #425b76; background-color: ; font-size: 20px; width: 100%; margin: initial; min-width: 100%; ">
-                                        <tbody>
-                                          <tr>
-                                            <td align="center" valign="middle" style="padding: 0; ">
-                                              <p style="font-size: 14px; margin: 0">
-                                                <i18n-string data-key="account.verifyUserEmailAddress.noSignupHelp" data-locale-at-render="en-us">Did not sign up for receiving comi? <a href="#"
-                                                    style="text-decoration: none; color: #00a4bd;">Let us know</a>.</i18n-string>
-                                              </p>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                      <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 0; height: 50px; width: 100%; min-width: 100%; line-height: 0;">
-                                        <tbody>
-                                          <tr>
-                                            <td height="50"><span style="-webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; color: transparent; background: none; user-select: none; -moz-user-select: none; -ms-user-select:none; -webkit-user-select:none; text-overflow: ellipsis; opacity: 0; width:100%; min-width: 100%; height:1; overlfow:hidden; margin: -1px 0 0 0; padding:0; font-size: 0;"> &nbsp;</span></td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
+                                      <p>If you received this email by mistake, simply delete it. You will not be subscribed if you do not click the confirmation link above.</p>
+                    
                                     </td>
                                   </tr>
-                                </tbody>
-                              </table>
-                              <table id="footer" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" bgcolor="#f5f8fa" style="width: 100%; min-width: 100%;">
-                                <tbody>
-                                  <tr>
-                                    <td align="center" valign="top">
-                                      <table cellpadding="0" border="0" cellspacing="0" width="100%" style="color: #425b76; background-color: ; font-size: 14px; width: 100%; margin: initial; min-width: 100%; line-height: 24px">
-                                        <tbody>
-                                          <tr>
-                                            <td align="center" valign="middle" style="padding: 20px 0 65px; ">HubSpot, Inc.<br>25 First Street, 2nd Floor<br>Cambridge, MA 02141</td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                                </table>
+                              </td>
+                            </tr>
               
-              
-              
-            </body>
-            
-            </html>
-            
-            ';
-    
-            $mail->Body = $emessage;
-            $mail->send();
-            $mail->clearAttachments();
-            $mail->ClearAllRecipients();
-        } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+                          </table>
+                        </div>
+                      </td>
+                      <td>&nbsp;</td>
+                    </tr>
+                  </table>
+                </body>
+              </html>
+              ';
+      
+              $mail->Body = $emessage;
+              $mail->send();
+              $mail->clearAttachments();
+              $mail->ClearAllRecipients();
+          } catch (Exception $e) {
+              echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+          }
+          $message="Thank you for registering, please click on the link received on your email for verification.";
         }
-        $message="Thank you for registering, please click on the link received on your email for verification.";
+        else{
+          $message="SQL Error!";
+        }
     }
   }
 ?>

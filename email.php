@@ -8,7 +8,7 @@ require 'vendor/autoload.php';
 require_once('config.php');
 $mail = new PHPMailer(true);
 
-$sql = "SELECT * FROM users WHERE is_subscribed=1";
+$sql = "SELECT * FROM users WHERE is_active=1";
 $result = $conn->query($sql);
 $emails = array();
 
