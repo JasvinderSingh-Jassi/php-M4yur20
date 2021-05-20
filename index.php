@@ -23,7 +23,7 @@ if (isset($_POST['register'])) {
             $result = $conn->query($sql);
             $mail = new PHPMailer(true); 
             $mail->isHTML(true);								
-	          $mail->Subject = 'Verify your account!';
+	          $mail->Subject = 'Please verify your account!';
             try {
                 $mail->SMTPDebug = -1;									
                 $mail->isSMTP();											
