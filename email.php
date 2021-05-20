@@ -16,7 +16,7 @@ while ($row = $result->fetch_assoc()) {
     array_push($emails,$row['email']);
 }
 
-$comic_id=rand(1,2462);
+    $comic_id=rand(1,2462);
     $api_url = 'https://xkcd.com/'.$comic_id.'/info.0.json';
 
     // GET Request
