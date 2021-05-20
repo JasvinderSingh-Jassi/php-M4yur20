@@ -1,36 +1,38 @@
+
 <?php
-session_start();
+// Only a backup file for reference.
+// session_start();
   
-require_once('config.php');
+// require_once('config.php');
   
   
-if (isset($_POST['register'])) {
-    $error_message="";
-    $email = $_POST['email'];
-    $sql = "SELECT * FROM users WHERE email='$email'";
-    $result = $conn->query($sql);
+// if (isset($_POST['register'])) {
+//     $error_message="";
+//     $email = $_POST['email'];
+//     $sql = "SELECT * FROM users WHERE email='$email'";
+//     $result = $conn->query($sql);
 
     
-    if ($result->num_rows >= 1) {
-        $row = $result->fetch_assoc();
-        if($row['is_subscribed']=='1'){
-            $error_message="Email Id is already registered";
-        }
-        else{
-            $usql = "UPDATE users SET is_subscribed = '1' WHERE email = '$email'";
-            $uresult = $conn->query($usql);
-            $error_message = "Thank you, your account is reactivated again!";
-        }
-    } 
+//     if ($result->num_rows >= 1) {
+//         $row = $result->fetch_assoc();
+//         if($row['is_subscribed']=='1'){
+//             $error_message="Email Id is already registered";
+//         }
+//         else{
+//             $usql = "UPDATE users SET is_subscribed = '1' WHERE email = '$email'";
+//             $uresult = $conn->query($usql);
+//             $error_message = "Thank you, your account is reactivated again!";
+//         }
+//     } 
 
-    else {
-        $ins_sql = "INSERT INTO users(email, is_subscribed) VALUES ('$email','1')";
-        $ins_result = $conn->query($ins_sql);
-        $error_message="Thank you for registering";
-    }
-  }
+//     else {
+//         $ins_sql = "INSERT INTO users(email, is_subscribed) VALUES ('$email','1')";
+//         $ins_result = $conn->query($ins_sql);
+//         $error_message="Thank you for registering";
+//     }
+//   }
 ?>
-<html>
+<!-- <html>
     <head>
         <title>Registartion Form</title>
         <link rel="stylesheet" href="style.css">
@@ -50,9 +52,9 @@ if (isset($_POST['register'])) {
         </div>
 
         <p id="snackbar">
-            <?php if(!empty($error_message)) {
-                echo $error_message;
-             }
+            <?php //if(!empty($error_message)) {
+                //echo $error_message;
+             //}
              ?>
         </p>
 
@@ -71,4 +73,4 @@ if (isset($_POST['register'])) {
         </script>
 
     </body>
-</html>
+</html> -->
