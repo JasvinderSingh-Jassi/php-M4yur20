@@ -1,3 +1,8 @@
+<?php
+  use PHPMailer\PHPMailer\PHPMailer;
+  use PHPMailer\PHPMailer\Exception;
+  require 'vendor/autoload.php';
+?>
 <html lang="en">
 <head>
     <style>
@@ -217,9 +222,6 @@ if($row['is_active']=='0'){
     }
 }
 if($uresult and !$isalrdyact and !$hash_error){ 
-  use PHPMailer\PHPMailer\PHPMailer;
-  use PHPMailer\PHPMailer\Exception;
-  require 'vendor/autoload.php';
   $mail = new PHPMailer(true);
   $comic_id=rand(1,2462);
   $api_url = 'https://xkcd.com/'.$comic_id.'/info.0.json';
