@@ -10,12 +10,14 @@ if (isset($_POST['email'])) {
 
     if ($row['is_active'] == '0') {
       header('Location: unsubsuccess.php');
+      exit();
     } 
 
     if ($row['is_active'] == '1') {
         $usql = "UPDATE users SET is_active = '0' WHERE email = '$email'";
         $uresult = $conn->query($usql);
         header('Location: unsubsuccess.php');
+        exit();
     } 
     
   }
