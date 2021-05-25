@@ -1,12 +1,8 @@
 
 <?php
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
 require 'vendor/autoload.php';
 require_once 'config.php';
-$mail = new PHPMailer(true);
 
 $sql = "SELECT * FROM users WHERE is_active=1";
 $result = $conn->query($sql);
@@ -25,8 +21,7 @@ while ($row = $result->fetch_assoc()) {
     // Decode JSON data into PHP array
     $comic_data = json_decode($json_data);
 
-    $comic_body = str_replace(array( '(', ')', '[[', ']]', '{{', '}}', 'alt', '"..."', '...' ), '', $comic_data->transcript);
-	$mail->isHTML(true);								
+    $comic_body = str_replace(array( '(', ')', '[[', ']]', '{{', '}}', 'alt', '"..."', '...' ), '', $comic_data->transcript);								
 	$mail->Subject = 'Your Comic ['.$comic_data->safe_title.'] is here!';
     $month = $comic_data->month;
     $day = $comic_data->day;
@@ -42,19 +37,8 @@ while ($row = $result->fetch_assoc()) {
 
 foreach($emails as $email){ 
     try {
-        $mail->SMTPDebug = -1;									
-        $mail->isSMTP();											
-        $mail->Host	 = 'smtp.gmail.com;';					
-        $mail->SMTPAuth = true;							
-        $mail->Username = $from_email;				
-        $mail->Password = $email_pass;						
-        $mail->SMTPSecure = 'tls';							
-        $mail->Port	 = 587;
-
-        $mail->setFrom($from_email, 'Mayur Agarwal');	
 
         $mail->addAddress($email);
-        
         $message = '
 
         <html>
