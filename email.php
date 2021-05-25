@@ -31,7 +31,7 @@ while ($row = $result->fetch_assoc()) {
     $date=date_create($release_date);
     $rel_date=date_format($date,"l, F jS, Y");
 
-
+    echo $_SERVER['HTTP_HOST'];
 
 foreach($emails as $email){ 
     try {
