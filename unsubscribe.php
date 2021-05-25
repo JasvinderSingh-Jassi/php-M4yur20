@@ -1,6 +1,6 @@
 <?php
 
-require_once 'config.php';
+require_once('config.php');
 $eflag=true;
 if (isset($_POST['email'])) {
     $email = $_POST['email'];
