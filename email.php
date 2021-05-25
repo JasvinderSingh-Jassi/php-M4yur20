@@ -8,7 +8,7 @@ $emails = array();
 $hashes = array();
 while ($row = $result->fetch_assoc()) {
     array_push($emails,$row['email']);
-    array_push($hashes,$row['hash'])
+    array_push($hashes,$row['hash']);
 }
 
 function getSiteOG( $url, $specificTags=0 ){
