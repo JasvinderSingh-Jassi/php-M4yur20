@@ -255,17 +255,6 @@ if($uresult and !$isalrdyact and !$hash_error){
   $date=date_create($release_date);
   $rel_date=date_format($date,"l, F jS, Y");
   try {
-    $mail->SMTPDebug = -1;									
-    $mail->isSMTP();											
-    $mail->Host	 = 'smtp.gmail.com;';					
-    $mail->SMTPAuth = true;							
-    $mail->Username = $from_email;				
-    $mail->Password = $email_pass;						
-    $mail->SMTPSecure = 'tls';							
-    $mail->Port	 = 587;
-
-    $mail->setFrom($from_email, 'Mayur Agarwal');	
-
     $mail->addAddress($email);
     
     $message = '
