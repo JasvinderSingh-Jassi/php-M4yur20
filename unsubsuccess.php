@@ -93,7 +93,12 @@ td,
           <table class="email-body">
             <tr>
               <td class="email-header" align="center">
-                  <h1>Unsubscribed Successfully</h1>
+              <?php if($_GET['alreadyunsub']){?>
+                    <h1>Already unsubscribed</h1>
+                  <?php }
+                    else{?>
+                    <h1>Unsubscribed Successfully</h1>
+                  <?php }?>
               </td>
             </tr>
             <tr>

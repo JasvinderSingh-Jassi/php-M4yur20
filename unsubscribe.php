@@ -1,23 +1,27 @@
 <?php
 require_once('config.php');
 $eflag=false;
-if (isset($_POST['email']) and $_POST['token'])) {
+if (isset($_POST['email']) and $_POST['token']){
     $email = $_POST['email'];
     $token = $_POST['token'];
     $email = filter_var($email, FILTER_SANITIZE_EMAIL);
     if(filter_var($email, FILTER_VALIDATE_EMAIL)) {
-      $eflag=false;
+      $eflag = false;
       $sql = "SELECT * FROM users WHERE email='$email'";
       $result = $conn->query($sql);
       $row = $result->fetch_assoc();
 
+      if($result->num_rows == 0){
+        $eflag = true;
+      }
+
       if ($row['is_active'] == '0') {
-        header('Location: unsubsuccess.php');
+        header('Location: unsubsuccess.php?alreadyunsub=1');
         exit();
       } 
 
       if ($row['is_active'] == '1') {
-        if($email==$row['email'] and $token==$row['hash']){
+        if($token==$row['hash']){
           $eflag=false;
           $is_activ = 0;
           $token = "";
@@ -32,8 +36,8 @@ if (isset($_POST['email']) and $_POST['token'])) {
           $eflag=true;
         }
       } 
-      
-  }
+    }
+    
   else{
     $eflag=true;
   }
