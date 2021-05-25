@@ -53,8 +53,7 @@ if(!$_SERVER['HTTP_HOST']){
     $_SERVER['HTTP_HOST'] = 'calm-journey-40539.herokuapp.com';
 }
 
-
-for($i=0; $i<count($emails)-1; $i++){ 
+for($i=0; $i<count($emails); $i++){ 
     try {
         $mail->setFrom('mayuragarwalrtcampassignment@gmail.com', 'Mayur Agarwal');		
 
