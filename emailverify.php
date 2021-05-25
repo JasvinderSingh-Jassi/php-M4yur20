@@ -197,7 +197,7 @@
 </head>
 <body>
 <?php 
-require_once('config.php');
+require_once 'config.php';
 $email=$_GET["email"];
 $hash=$_GET["hash"];
 $sql = "SELECT * FROM users WHERE email='$email'";

@@ -5,7 +5,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 require 'vendor/autoload.php';
-require_once('config.php');
+require_once 'config.php';
 $mail = new PHPMailer(true);
 
 $sql = "SELECT * FROM users WHERE is_active=1";
