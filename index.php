@@ -609,6 +609,9 @@ if (isset($_POST['register'])) {
           }
       }
     }
+    else{
+      $message="Please enter a valid email"
+    }
   }
 ?>
 <html>
