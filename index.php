@@ -299,8 +299,10 @@ if (isset($_POST['register'])) {
 
       else {
           $hash = md5( rand(0,1000) );
-          $sql = "INSERT INTO users(`email`, `hash`) VALUES ('$email','$hash')";
-          $result = $conn->query($sql);
+          $sql = "INSERT INTO users(`email`, `hash`) VALUES (?,?)";
+          $stmt = $conn->prepare($sql);
+          $stmt->bind_param("ss", $email, $hash);
+          $result = $stmt->execute();;
           if($result){
 
             $mail->Subject = 'Confirm your Email';
