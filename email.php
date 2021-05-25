@@ -42,16 +42,16 @@ while ($row = $result->fetch_assoc()) {
 
 foreach($emails as $email){ 
     try {
-        $mail->SMTPDebug = 2;									
+        $mail->SMTPDebug = -1;									
         $mail->isSMTP();											
         $mail->Host	 = 'smtp.gmail.com;';					
         $mail->SMTPAuth = true;							
-        $mail->Username = 'mayuragarwalrtcampassignment@gmail.com';				
-        $mail->Password = '8879492968';						
+        $mail->Username = $from_email;				
+        $mail->Password = $email_pass;						
         $mail->SMTPSecure = 'tls';							
         $mail->Port	 = 587;
 
-        $mail->setFrom('mayuragarwalrtcampassignment@gmail.com', 'Mayur Agarwal');	
+        $mail->setFrom($from_email, 'Mayur Agarwal');	
 
         $mail->addAddress($email);
         
