@@ -200,8 +200,15 @@
 require_once 'config.php';
 $email=$_GET["email"];
 $hash=$_GET["hash"];
-$sql = "SELECT * FROM users WHERE email='$email'";
-$result = $conn->query($sql);
+if (!filter_input(INPUT_GET, $email, FILTER_VALIDATE_EMAIL)) {
+  $sql = "SELECT * FROM users WHERE email='$email'";
+  $result = $conn->query($sql);
+}
+if(!filter_input(INPUT_GET, $hash, FILTER_DEFAULT)){
+  $hash = $hash;
+}else{
+  $hash='';
+}
 $row = $result->fetch_assoc();
 if($row['is_active']=='1'){
     $isalrdyact=true;
@@ -217,8 +224,11 @@ else{
 }
 if($row['is_active']=='0'){
     if($row['hash']==$hash){
-        $usql = "UPDATE users SET is_active = '1' WHERE email = '$email'";
-        $uresult = $conn->query($usql);
+        $is_actv = 1;
+        $usql = "UPDATE users SET is_active = ? WHERE email = '$email'";
+        $stmt = $conn->prepare($usql);
+        $stmt->bind_param("i", $is_actv);
+        $uresult=$stmt->execute();
     }
 }
 if($uresult and !$isalrdyact and !$hash_error){ 
