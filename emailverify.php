@@ -226,7 +226,7 @@ if($row['is_active']=='0'){
     }
 }
 if($uresult and !$isalrdyact and !$hash_error){ 
-  include 'email.php';
+  `php email.php`;
   ?>
 <div class="wrapperAlert">
 <div class="contentAlert">
