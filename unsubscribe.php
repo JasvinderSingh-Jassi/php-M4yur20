@@ -1,27 +1,33 @@
 <?php
   
 require_once 'config.php' ;
-  
+$eflag=true;
 if (isset($_POST['email'])) {
     $email = $_POST['email'];
-    $email = filter_input(INPUT_POST, $email, FILTER_VALIDATE_EMAIL)
-    $sql = "SELECT * FROM users WHERE email='$email'";
-    $result = $conn->query($sql);
-    $row = $result->fetch_assoc();
+    $email = filter_var($email, FILTER_SANITIZE_EMAIL);
+    if(filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      $eflag=true;
+      $sql = "SELECT * FROM users WHERE email='$email'";
+      $result = $conn->query($sql);
+      $row = $result->fetch_assoc();
 
-    if ($row['is_active'] == '0') {
-      header('Location: unsubsuccess.php');
-      exit();
-    } 
-
-    if ($row['is_active'] == '1') {
-        $usql = "UPDATE users SET is_active = '0' WHERE email = '$email'";
-        $uresult = $conn->query($usql);
+      if ($row['is_active'] == '0') {
         header('Location: unsubsuccess.php');
         exit();
-    } 
-    
+      } 
+
+      if ($row['is_active'] == '1') {
+          $usql = "UPDATE users SET is_active = '0' WHERE email = '$email'";
+          $uresult = $conn->query($usql);
+          header('Location: unsubsuccess.php');
+          exit();
+      } 
+      
   }
+  else{
+    $eflag=false;
+  }
+}
 ?>
 
 <html lang="en">
@@ -128,6 +134,7 @@ td,
 </style>
 </head>
 <body>
+<?php if($eflag){ ?>
 <table class="unsubscribed-page">
       <tr>
         <td>
@@ -156,10 +163,36 @@ td,
                 </div>
               </td>
             </tr>
-
           </table>
         </td>
       </tr>
     </table>
+    <?php } else{ ?>
+      <table class="unsubscribed-page">
+      <tr>
+        <td>
+          <table class="email-body">
+            <tr>
+              <td class="email-header" align="center">
+                  <h1>Unsubscribe</h1>
+              </td>
+            </tr>
+            <tr>
+              <td class="news-section">
+                <div id="templateBody" class="bodyContent rounded6">
+                  <input type="hidden" name="email" value="<?php echo $_GET["email"]; ?>">
+                  <div class="groups">
+                    <h3>Some error occured! Please try again</h3>
+                  </div>
+                  <br>
+                  <a href="https://<?php echo $_SERVER['HTTP_HOST']; ?>">« Return to our website</a>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <?php } ?>
 </body>
 </html>
