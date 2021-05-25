@@ -158,19 +158,5 @@ td,
         </td>
       </tr>
     </table>
-
-    <script>
-
-      // function clickfunc(event){
-      //   if(event.target.value=="sure"){
-      //     alert(event.target.value);
-      //     document.getElementById("btn").disabled=false;
-      //   }
-      //   else{
-      //     document.getElementById("btn").disabled=true;
-      //   }
-      // }
-
-    </script>
 </body>
 </html>
