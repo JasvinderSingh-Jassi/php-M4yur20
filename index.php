@@ -1,4 +1,5 @@
 <?php
+  
 require 'vendor/autoload.php';
 require_once 'config.php';
   
@@ -18,9 +19,11 @@ if (isset($_POST['register'])) {
           else{
               $hash = md5( rand(0,1000) );
               $sql = "UPDATE users SET hash = '$hash' WHERE email = '$email'";
-              $result = $conn->query($sql);							
+              $result = $conn->query($sql);								
               $mail->Subject = 'Please verify your account!';
               try {
+                  $mail->setFrom('mayuragarwalrtcampassignment@gmail.com', 'Mayur Agarwal');	
+          
                   $mail->addAddress($email);
                   
                   $emessage = '
@@ -300,9 +303,12 @@ if (isset($_POST['register'])) {
           $hash = md5( rand(0,1000) );
           $sql = "INSERT INTO users(`email`, `hash`) VALUES ('$email','$hash')";
           $result = $conn->query($sql);
-          if($result){							
+          if($result){
+
             $mail->Subject = 'Confirm your Email';
             try {
+                $mail->setFrom('mayuragarwalrtcampassignment@gmail.com', 'Mayur Agarwal');	
+        
                 $mail->addAddress($email);
                 
                 $emessage = '

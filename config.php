@@ -18,6 +18,5 @@ $mail->Username = 'mayuragarwalrtcampassignment@gmail.com';
 $mail->Password = '8879492968';						
 $mail->SMTPSecure = 'tls';							
 $mail->Port	 = 587;
-$mail->setFrom('mayuragarwalrtcampassignment@gmail.com', 'Mayur Agarwal');	
 
 ?>

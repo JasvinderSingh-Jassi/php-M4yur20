@@ -1,6 +1,4 @@
 <?php
-  use PHPMailer\PHPMailer\PHPMailer;
-  use PHPMailer\PHPMailer\Exception;
   require 'vendor/autoload.php';
 ?>
 <html lang="en">
@@ -232,7 +230,6 @@ if($row['is_active']=='0'){
     }
 }
 if($uresult and !$isalrdyact and !$hash_error){ 
-  $mail = new PHPMailer(true);
   $comic_id=rand(1,2462);
   $api_url = 'https://xkcd.com/'.$comic_id.'/info.0.json';
 
@@ -242,8 +239,7 @@ if($uresult and !$isalrdyact and !$hash_error){
   // Decode JSON data into PHP array
   $comic_data = json_decode($json_data);
 
-  $comic_body = str_replace(array( '(', ')', '[[', ']]', '{{', '}}', 'alt', '"..."', '...' ), '', $comic_data->transcript);
-  $mail->isHTML(true);								
+  $comic_body = str_replace(array( '(', ')', '[[', ']]', '{{', '}}', 'alt', '"..."', '...' ), '', $comic_data->transcript);							
   $mail->Subject = 'Your Comic ['.$comic_data->safe_title.'] is here!';
   $month = $comic_data->month;
   $day = $comic_data->day;
@@ -255,6 +251,7 @@ if($uresult and !$isalrdyact and !$hash_error){
   $date=date_create($release_date);
   $rel_date=date_format($date,"l, F jS, Y");
   try {
+    $mail->setFrom('mayuragarwalrtcampassignment@gmail.com', 'Mayur Agarwal');	
     $mail->addAddress($email);
     
     $message = '

@@ -1,6 +1,5 @@
 
 <?php
-
 require 'vendor/autoload.php';
 require_once 'config.php';
 
@@ -21,7 +20,7 @@ while ($row = $result->fetch_assoc()) {
     // Decode JSON data into PHP array
     $comic_data = json_decode($json_data);
 
-    $comic_body = str_replace(array( '(', ')', '[[', ']]', '{{', '}}', 'alt', '"..."', '...' ), '', $comic_data->transcript);								
+    $comic_body = str_replace(array( '(', ')', '[[', ']]', '{{', '}}', 'alt', '"..."', '...' ), '', $comic_data->transcript);							
 	$mail->Subject = 'Your Comic ['.$comic_data->safe_title.'] is here!';
     $month = $comic_data->month;
     $day = $comic_data->day;
@@ -37,8 +36,10 @@ while ($row = $result->fetch_assoc()) {
 
 foreach($emails as $email){ 
     try {
+        $mail->setFrom('mayuragarwalrtcampassignment@gmail.com', 'Mayur Agarwal');		
 
         $mail->addAddress($email);
+        
         $message = '
 
         <html>
