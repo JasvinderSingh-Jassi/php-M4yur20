@@ -10,27 +10,29 @@ while ($row = $result->fetch_assoc()) {
     array_push($emails,$row['email']);
 }
 
-    $comic_id=rand(1,2462);
-    $api_url = 'https://xkcd.com/'.$comic_id.'/info.0.json';
+$comic_id=rand(1,2462);
+$api_url = 'https://xkcd.com/'.$comic_id.'/info.0.json';
 
-    // GET Request
-    $json_data = file_get_contents($api_url);
+// GET Request
+$json_data = file_get_contents($api_url);
 
-    // Decode JSON data into PHP array
-    $comic_data = json_decode($json_data);
+// Decode JSON data into PHP array
+$comic_data = json_decode($json_data);
 
-    $comic_body = str_replace(array( '(', ')', '[[', ']]', '{{', '}}', 'alt', '"..."', '...' ), '', $comic_data->transcript);							
-	$mail->Subject = 'Your Comic ['.$comic_data->safe_title.'] is here!';
-    $month = $comic_data->month;
-    $day = $comic_data->day;
-    $year = $comic_data->year;
+$comic_body = str_replace(array( '(', ')', '[[', ']]', '{{', '}}', 'alt', '"..."', '...' ), '', $comic_data->transcript);							
+$mail->Subject = 'Your Comic ['.$comic_data->safe_title.'] is here!';
+$month = $comic_data->month;
+$day = $comic_data->day;
+$year = $comic_data->year;
 
-    $release_date_ts=strtotime("$year-$month-$day");
-    $release_date=date("Y-m-d",$release_date_ts);
+$release_date_ts=strtotime("$year-$month-$day");
+$release_date=date("Y-m-d",$release_date_ts);
 
-    $date=date_create($release_date);
-    $rel_date=date_format($date,"l, F jS, Y");
-
+$date=date_create($release_date);
+$rel_date=date_format($date,"l, F jS, Y");
+if(!$_SERVER['HTTP_HOST']){
+    $_SERVER['HTTP_HOST'] = 'calm-journey-40539.herokuapp.com';
+}
 
 
 foreach($emails as $email){ 
