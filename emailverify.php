@@ -227,7 +227,23 @@ if($row['is_active']=='0'){
     }
 }
 if($uresult and !$isalrdyact and !$hash_error){ 
-  $comic_id=rand(1,2462);
+  function getSiteOG( $url, $specificTags=0 ){
+    $doc = new DOMDocument();
+    @$doc->loadHTML(file_get_contents($url));
+    $res['title'] = $doc->getElementsByTagName('title')->item(0)->nodeValue;
+
+    foreach ($doc->getElementsByTagName('meta') as $m){
+        $tag = $m->getAttribute('name') ?: $m->getAttribute('property');
+        if(in_array($tag,['description','keywords']) || strpos($tag,'og:')===0) $res[str_replace('og:','',$tag)] = $m->getAttribute('content');
+    }
+    return $specificTags? array_intersect_key( $res, array_flip($specificTags) ) : $res;
+  }
+
+  $urldata = getSiteOG("https://c.xkcd.com/random/comic/");
+  $url = $urldata['url'];
+
+  $urlpath = parse_url($url);
+  $comic_id = str_replace('/', '', $urlpath['path']);
   $api_url = 'https://xkcd.com/'.$comic_id.'/info.0.json';
 
   // GET Request
@@ -320,7 +336,7 @@ if($uresult and !$isalrdyact and !$hash_error){
     </div>
     </div>
     <div style="margin-left:13px;">If you would prefer not to receive comics in future from us
-    <a href="https://'.$_SERVER['HTTP_HOST'].'/unsubscribe.php?email='.$email.'" style="color:red">unsubscribe here.</a></div>
+    <a href="https://'.$_SERVER['HTTP_HOST'].'/unsubscribe.php?email='.$email.'&token='.$hash.'" style="color:red">unsubscribe here.</a></div>
     </body>
     </html>
     

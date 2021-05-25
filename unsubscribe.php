@@ -1,11 +1,12 @@
 <?php
 require_once('config.php');
-$eflag=true;
-if (isset($_POST['email'])) {
+$eflag=false;
+if (isset($_POST['email']) and $_POST['token'])) {
     $email = $_POST['email'];
+    $token = $_POST['token'];
     $email = filter_var($email, FILTER_SANITIZE_EMAIL);
     if(filter_var($email, FILTER_VALIDATE_EMAIL)) {
-      $eflag=true;
+      $eflag=false;
       $sql = "SELECT * FROM users WHERE email='$email'";
       $result = $conn->query($sql);
       $row = $result->fetch_assoc();
@@ -16,18 +17,25 @@ if (isset($_POST['email'])) {
       } 
 
       if ($row['is_active'] == '1') {
-        $is_activ = 0;
-        $sql = "UPDATE users SET is_active = ? WHERE email = '$email'";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("i", $is_activ);
-        $result = $stmt->execute();	
-        header('Location: unsubsuccess.php');
-        exit();
+        if($email==$row['email'] and $token==$row['hash']){
+          $eflag=false;
+          $is_activ = 0;
+          $token = "";
+          $sql = "UPDATE users SET `is_active` = ?, `hash` = ? WHERE email = '$email'";
+          $stmt = $conn->prepare($sql);
+          $stmt->bind_param("is", $is_activ, $token);
+          $result = $stmt->execute();	
+          header('Location: unsubsuccess.php');
+          exit();
+        }
+        else{
+          $eflag=true;
+        }
       } 
       
   }
   else{
-    $eflag=false;
+    $eflag=true;
   }
 }
 ?>
@@ -37,7 +45,7 @@ if (isset($_POST['email'])) {
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Unsubscribe</title>
   <style>
     body {
   margin: 0;
@@ -136,7 +144,7 @@ td,
 </style>
 </head>
 <body>
-<?php if($eflag){ ?>
+<?php if(!$eflag){ ?>
 <table class="unsubscribed-page">
       <tr>
         <td>
@@ -151,6 +159,7 @@ td,
                 <div id="templateBody" class="bodyContent rounded6">
                   <form method="POST">
                     <input type="hidden" name="email" value="<?php echo $_GET["email"]; ?>">
+                    <input type="hidden" name="token" value="<?php echo $_GET["token"]; ?>">
                   	<div class="groups">
                   		<h3>Are you sure, you want to unsubscribe?</h3>
                   		<ul>

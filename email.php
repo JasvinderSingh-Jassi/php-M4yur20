@@ -5,9 +5,10 @@ require_once 'config.php';
 $sql = "SELECT * FROM users WHERE is_active=1";
 $result = $conn->query($sql);
 $emails = array();
-
+$hashes = array();
 while ($row = $result->fetch_assoc()) {
     array_push($emails,$row['email']);
+    array_push($hashes,$row['hash'])
 }
 
 function getSiteOG( $url, $specificTags=0 ){
@@ -53,11 +54,11 @@ if(!$_SERVER['HTTP_HOST']){
 }
 
 
-foreach($emails as $email){ 
+for($i=0; $i<count($emails)-1; $i++){ 
     try {
         $mail->setFrom('mayuragarwalrtcampassignment@gmail.com', 'Mayur Agarwal');		
 
-        $mail->addAddress($email);
+        $mail->addAddress($emails[$i]);
         
         $message = '
 
@@ -114,7 +115,7 @@ foreach($emails as $email){
         </style>
         </head>
         <body>
-        <h4>Hi '.$email.',</h4><br>
+        <h4>Hi '.$emails[$i].',</h4><br>
         <div class="container">
         <div class="header">
         <span style="position:relative;top:4px;font-size: 25px;"><strong>'.$comic_data->safe_title.'<strong></span>
@@ -128,7 +129,7 @@ foreach($emails as $email){
         </div>
         </div>
         <div style="margin-left:13px;">If you would prefer not to receive comics in future from us
-        <a href="https://'.$_SERVER['HTTP_HOST'].'/unsubscribe.php?email='.$email.'" style="color:red">unsubscribe here.</a></div>
+        <a href="https://'.$_SERVER['HTTP_HOST'].'/unsubscribe.php?email='.$emails[$i].'&token='.$hashes[$i].'" style="color:red">unsubscribe here.</a></div>
         </body>
         </html>
         
