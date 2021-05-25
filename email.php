@@ -1,7 +1,6 @@
 
 <?php
-require_once 'config.php';
-
+require_once __DIR__.'/config.php';
 $sql = "SELECT * FROM users WHERE is_active=1";
 $result = $conn->query($sql);
 $emails = array();

@@ -192,7 +192,7 @@
 </head>
 <body>
 <?php 
-require_once 'config.php';
+require_once __DIR__.'/config.php';
 $email=$_GET["email"];
 $hash=$_GET["hash"];
 if (!filter_input(INPUT_GET, $email, FILTER_VALIDATE_EMAIL)) {
