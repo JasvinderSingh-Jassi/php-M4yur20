@@ -7,7 +7,7 @@ require 'vendor/autoload.php';
 require_once('config.php');
   
 if (isset($_POST['register'])) {
-    $message="";
+    $message='';
     $email = $_POST['email'];
     $email = filter_var($email, FILTER_SANITIZE_EMAIL);
     if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -17,7 +17,7 @@ if (isset($_POST['register'])) {
       if ($result->num_rows >= 1) {
           $row = $result->fetch_assoc();
           if($row['is_active']=='1'){
-              $message="Email is already registered and active for receiving comics.";
+              $message='Email is already registered and active for receiving comics.';
           }
           else{
               $hash = md5( rand(0,1000) );
@@ -309,7 +309,7 @@ if (isset($_POST['register'])) {
               } catch (Exception $e) {
                   echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
               }
-              $message = "For receiving comics, please click on the link received on your email.";
+              $message = 'For receiving comics, please click on the link received on your email.';
           }
       } 
 
@@ -602,15 +602,15 @@ if (isset($_POST['register'])) {
             } catch (Exception $e) {
                 echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
             }
-            $message="Thank you for registering, please click on the link received on your email for verification.";
+            $message='Thank you for registering, please click on the link received on your email for verification.';
           }
           else{
-            $message="SQL Error!";
+            $message='SQL Error!';
           }
       }
     }
     else{
-      $message="Please enter a valid email"
+      $message='Please enter a valid email';
     }
   }
 ?>
@@ -620,7 +620,7 @@ if (isset($_POST['register'])) {
         <link rel="stylesheet" href="style.css">
         
     </head>
-    <body onload="myFunction()">
+    <body onload="errormessage()">
         <div class="container">
             <form method="post">
             <div class="container">
@@ -641,7 +641,7 @@ if (isset($_POST['register'])) {
         </div>
 
         <script>
-            function myFunction() {
+            function errormessage() {
                 // Get the snackbar DIV
                 var x = document.getElementById("snackbar");
                 if(x.textContent.length!=21){
