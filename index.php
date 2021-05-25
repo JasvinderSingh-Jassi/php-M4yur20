@@ -16,8 +16,10 @@ if (isset($_POST['register'])) {
           }
           else{
               $hash = md5( rand(0,1000) );
-              $sql = "UPDATE users SET hash = '$hash' WHERE email = '$email'";
-              $result = $conn->query($sql);								
+              $sql = "UPDATE users SET hash = ? WHERE email = '$email'";
+              $stmt = $conn->prepare($sql);
+              $stmt->bind_param("s", $hash);
+              $result = $stmt->execute();							
               $mail->Subject = 'Please verify your account!';
               try {
                   $mail->setFrom('mayuragarwalrtcampassignment@gmail.com', 'Mayur Agarwal');	
