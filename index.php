@@ -1,8 +1,4 @@
 <?php
-  
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
 require 'vendor/autoload.php';
 require_once 'config.php';
   
@@ -22,22 +18,9 @@ if (isset($_POST['register'])) {
           else{
               $hash = md5( rand(0,1000) );
               $sql = "UPDATE users SET hash = '$hash' WHERE email = '$email'";
-              $result = $conn->query($sql);
-              $mail = new PHPMailer(true); 
-              $mail->isHTML(true);								
+              $result = $conn->query($sql);							
               $mail->Subject = 'Please verify your account!';
               try {
-                  $mail->SMTPDebug = -1;									
-                  $mail->isSMTP();											
-                  $mail->Host	 = 'smtp.gmail.com;';					
-                  $mail->SMTPAuth = true;							
-                  $mail->Username = $from_email;				
-                  $mail->Password = $email_pass;					
-                  $mail->SMTPSecure = 'tls';							
-                  $mail->Port	 = 587;
-          
-                  $mail->setFrom($from_email, 'Mayur Agarwal');	
-          
                   $mail->addAddress($email);
                   
                   $emessage = '
@@ -317,22 +300,9 @@ if (isset($_POST['register'])) {
           $hash = md5( rand(0,1000) );
           $sql = "INSERT INTO users(`email`, `hash`) VALUES ('$email','$hash')";
           $result = $conn->query($sql);
-          if($result){
-            $mail = new PHPMailer(true); 
-            $mail->isHTML(true);								
+          if($result){							
             $mail->Subject = 'Confirm your Email';
             try {
-                $mail->SMTPDebug = -1;									
-                $mail->isSMTP();											
-                $mail->Host	 = 'smtp.gmail.com;';					
-                $mail->SMTPAuth = true;							
-                $mail->Username = $from_email;				
-                $mail->Password = $email_pass;					
-                $mail->SMTPSecure = 'tls';							
-                $mail->Port	 = 587;
-        
-                $mail->setFrom($from_email, 'Mayur Agarwal');	
-        
                 $mail->addAddress($email);
                 
                 $emessage = '
