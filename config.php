@@ -8,11 +8,11 @@ $mail->SMTPDebug = -1;
 $mail->isSMTP();											
 $mail->Host	 = 'smtp.gmail.com;';					
 $mail->SMTPAuth = true;							
-$mail->Username = 'mayuragarwalrtcampassignment@gmail.com';				
-$mail->Password = '8879492968';						
+$mail->Username = ''; // from email				
+$mail->Password = ''; // email password						
 $mail->SMTPSecure = 'tls';							
 $mail->Port	 = 587;
-$conn = new mysqli('remotemysql.com', 'qGNCPDYwWb', '9OlCyEROxy', 'qGNCPDYwWb');
+$conn = new mysqli('db_host', 'db_username', 'db_password', 'db_name');
  
 if ($conn->connect_errno) {
     echo "Error: " . $conn->connect_error;
