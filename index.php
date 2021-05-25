@@ -275,7 +275,7 @@ if (isset($_POST['register'])) {
                                                 <table border="0" cellpadding="0" cellspacing="0">
                                                   <tbody>
                                                     <tr>
-                                                      <td> <a href="https://<?php echo $_SERVER['HTTP_HOST']; ?>/emailverify.php?email='.$email.'&hash='.$hash.'" target="_blank">confirm email</a> </td>
+                                                      <td> <a href="https://'.'<?php echo $_SERVER['HTTP_HOST']; ?>'.'/emailverify.php?email='.$email.'&hash='.$hash.'" target="_blank">confirm email</a> </td>
                                                     </tr>
                                                   </tbody>
                                                 </table>
@@ -569,7 +569,7 @@ if (isset($_POST['register'])) {
                                                 <table border="0" cellpadding="0" cellspacing="0">
                                                   <tbody>
                                                     <tr>
-                                                      <td> <a href="https://<?php echo $_SERVER['HTTP_HOST']; ?>/emailverify.php?email='.$email.'&hash='.$hash.'" target="_blank">confirm email</a> </td>
+                                                      <td> <a href="https://'.'<?php echo $_SERVER['HTTP_HOST']; ?>'.'/emailverify.php?email='.$email.'&hash='.$hash.'" target="_blank">confirm email</a> </td>
                                                     </tr>
                                                   </tbody>
                                                 </table>
