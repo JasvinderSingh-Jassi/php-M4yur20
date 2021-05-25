@@ -4,6 +4,7 @@ require_once 'config.php' ;
   
 if (isset($_POST['email'])) {
     $email = $_POST['email'];
+    $email = filter_input(INPUT_POST, $email, FILTER_VALIDATE_EMAIL)
     $sql = "SELECT * FROM users WHERE email='$email'";
     $result = $conn->query($sql);
     $row = $result->fetch_assoc();
