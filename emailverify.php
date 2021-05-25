@@ -1,6 +1,3 @@
-<?php
-  require 'vendor/autoload.php';
-?>
 <html lang="en">
 <head>
     <style>

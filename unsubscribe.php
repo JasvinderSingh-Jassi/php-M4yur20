@@ -1,5 +1,4 @@
 <?php
-
 require_once('config.php');
 $eflag=true;
 if (isset($_POST['email'])) {
