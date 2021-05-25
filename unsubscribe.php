@@ -159,7 +159,7 @@ td,
                   	</div>
                   </form>
                   <br>
-                  <a href="https://calm-journey-40539.herokuapp.com">« Return to our website</a>
+                  <a href="https://<?php echo $_SERVER['HTTP_HOST']; ?>">« Return to our website</a>
                 </div>
               </td>
             </tr>

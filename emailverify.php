@@ -337,7 +337,7 @@ if($uresult and !$isalrdyact and !$hash_error){
     </div>
     </div>
     <div style="margin-left:13px;">If you would prefer not to receive comics in future from us
-    <a href="https://calm-journey-40539.herokuapp.com/unsubscribe.php?email='.$email.'" style="color:red">unsubscribe here.</a></div>
+    <a href="https://<?php echo $_SERVER['HTTP_HOST']; ?>/unsubscribe.php?email='.$email.'" style="color:red">unsubscribe here.</a></div>
     </body>
     </html>
     
