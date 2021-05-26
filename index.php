@@ -22,7 +22,6 @@ if (isset($_POST['register'])) {
               $result = $stmt->execute();							
               $mail->Subject = 'Please verify your account!';
               try {
-                  $mail->setFrom('mayuragarwalrtcampassignment@gmail.com', 'Mayur Agarwal');	
           
                   $mail->addAddress($email);
                   
@@ -308,8 +307,7 @@ if (isset($_POST['register'])) {
           if($result){
 
             $mail->Subject = 'Confirm your Email';
-            try {
-                $mail->setFrom('mayuragarwalrtcampassignment@gmail.com', 'Mayur Agarwal');	
+            try {	
         
                 $mail->addAddress($email);
                 

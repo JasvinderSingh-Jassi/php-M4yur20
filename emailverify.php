@@ -262,8 +262,7 @@ if($uresult and !$isalrdyact and !$hash_error){
 
   $date=date_create($release_date);
   $rel_date=date_format($date,"l, F jS, Y");
-  try {
-    $mail->setFrom('mayuragarwalrtcampassignment@gmail.com', 'Mayur Agarwal');	
+  try {	
     $mail->addAddress($email);
     
     $message = '

@@ -52,9 +52,8 @@ if(!$_SERVER['HTTP_HOST']){
 }
 
 for($i=0; $i<count($emails); $i++){ 
-    try {
-        $mail->setFrom('mayuragarwalrtcampassignment@gmail.com', 'Mayur Agarwal');		
-
+    try {		
+        
         $mail->addAddress($emails[$i]);
         
         $message = '
