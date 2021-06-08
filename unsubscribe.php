@@ -24,10 +24,10 @@ if (isset($_POST['email']) and $_POST['token']){
         if($token==$row['hash']){
           $eflag=false;
           $is_activ = 0;
-          $token = "";
-          $sql = "UPDATE users SET `is_active` = ?, `hash` = ? WHERE email = '$email'";
+          $token = '';
+          $sql = 'UPDATE users SET is_active = ?, hash = ? WHERE email = ?';
           $stmt = $conn->prepare($sql);
-          $stmt->bind_param("is", $is_activ, $token);
+          $stmt->bind_param("iss", $is_activ, $token, $email);
           $result = $stmt->execute();	
           header('Location: unsubsuccess.php');
           exit();

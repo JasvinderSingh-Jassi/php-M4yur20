@@ -193,265 +193,287 @@
 <body>
 <?php 
 require_once __DIR__.'/config.php';
-$email=$_GET["email"];
-$hash=$_GET["hash"];
-if (!filter_input(INPUT_GET, $email, FILTER_VALIDATE_EMAIL)) {
+require __DIR__.'/helperfuncs.php';
+$email=$_GET['email'];
+$hash=$_GET['hash'];
+
+// Removing the illegal characters from email
+$email = filter_var($email, FILTER_SANITIZE_EMAIL);
+
+//Validating
+if (!filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
   $sql = "SELECT * FROM users WHERE email='$email'";
   $result = $conn->query($sql);
-}
-if(!filter_input(INPUT_GET, $hash, FILTER_DEFAULT)){
-  $hash = $hash;
-}else{
-  $hash='';
-}
-$row = $result->fetch_assoc();
-if($row['is_active']=='1'){
-    $isalrdyact=true;
-}
-else{
-    $isalrdyact=false;
-}
-if($row['hash']==$hash){
-    $hash_error=false;
-}
-else{
-    $hash_error=true;
-}
-if($row['is_active']=='0'){
-    if($row['hash']==$hash){
-        $is_actv = 1;
-        $usql = "UPDATE users SET is_active = ? WHERE email = '$email'";
-        $stmt = $conn->prepare($usql);
-        $stmt->bind_param("i", $is_actv);
-        $uresult=$stmt->execute();
-    }
-}
-if($uresult and !$isalrdyact and !$hash_error){ 
-  function getSiteOG($url, $specificTags=0){
-    $doc = new DOMDocument();
-    @$doc->loadHTML(file_get_contents($url));
-    $res['title'] = $doc->getElementsByTagName('title')->item(0)->nodeValue;
-    foreach ($doc->getElementsByTagName('meta') as $m){
-        $tag = $m->getAttribute('name') ?: $m->getAttribute('property');
-        if(in_array($tag,['description','keywords']) || strpos($tag,'og:')===0) $res[str_replace('og:','',$tag)] = $m->getAttribute('content');
-    }
-    return $specificTags? array_intersect_key( $res, array_flip($specificTags) ) : $res;
+
+  $row = $result->fetch_assoc();
+  if($row['is_active']=='1'){
+    $is_active=true;
   }
+  else{
+    $is_active=false;
+  }
+  if($row['hash']==$hash){
+    $hash_error=false;
+  }
+  else{
+    $hash_error=true;
+  }
+  if($row['is_active']=='0'){
+      if($row['hash']==$hash){
+          $activate = 1;
+          $usql = 'UPDATE users SET is_active = ? WHERE email = ?';
+          $stmt = $conn->prepare($usql);
+          $stmt->bind_param('is', $activate, $email);
+          $uresult=$stmt->execute();
+      }
+  }
+  if($uresult and !$is_active and !$hash_error){ 
+    $comic_id = getRandomComicId('https://c.xkcd.com/random/comic/');
+    $api_url = 'https://xkcd.com/'.$comic_id.'/info.0.json';
 
-  $urldata = getSiteOG("https://c.xkcd.com/random/comic/");
-  $url = $urldata['url'];
+    // GET Request
+    $json_data = file_get_contents($api_url);
 
-  $urlpath = parse_url($url);
-  $comic_id = str_replace('/', '', $urlpath['path']);
-  $api_url = 'https://xkcd.com/'.$comic_id.'/info.0.json';
+    // Decode JSON data into PHP array
+    $comic_data = json_decode($json_data);
 
-  // GET Request
-  $json_data = file_get_contents($api_url);
+    $comic_body = str_replace(array( '(', ')', '[[', ']]', '{{', '}}', 'alt', '"..."', '...' ), '', $comic_data->transcript);							
+    $mail->Subject = 'Your Comic ['.$comic_data->safe_title.'] is here!';
+    $month = $comic_data->month;
+    $day = $comic_data->day;
+    $year = $comic_data->year;
 
-  // Decode JSON data into PHP array
-  $comic_data = json_decode($json_data);
+    $release_date_ts=strtotime("$year-$month-$day");
+    $release_date=date("Y-m-d",$release_date_ts);
 
-  $comic_body = str_replace(array( '(', ')', '[[', ']]', '{{', '}}', 'alt', '"..."', '...' ), '', $comic_data->transcript);							
-  $mail->Subject = 'Your Comic ['.$comic_data->safe_title.'] is here!';
-  $month = $comic_data->month;
-  $day = $comic_data->day;
-  $year = $comic_data->year;
+    $date=date_create($release_date);
+    $rel_date=date_format($date,"l, F jS, Y");
+    try {	
+      $mail->addAddress($email);
+      
+      $message = '
 
-  $release_date_ts=strtotime("$year-$month-$day");
-  $release_date=date("Y-m-d",$release_date_ts);
+      <html>
+      <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Document</title>
+      <style>
+          .container {
+          width: 500px;
+          margin: 10px;
+          border: 1px solid #fff;
+          background-color: #ffffff;
+          box-shadow: 0px 2px 7px #292929;
+          -moz-box-shadow: 0px 2px 7px #292929;
+          -webkit-box-shadow: 0px 2px 7px #292929;
+          border-radius: 10px;
+          -moz-border-radius: 10px;
+          -webkit-border-radius: 10px;
+      }
+      .mainbody,
+      .header,
+      .footer {
+          padding: 5px;
+      }
+      .mainbody {
+          margin-top: 5px;
+      }
+      .header {
+          text-align:center;
+          min-height: 40px;
+          height: auto;
+          width: 100%;
+          resize: both;
+          overflow: auto;
+          background-color: whiteSmoke;
+          border-bottom: 1px solid #DDD;
+          border-bottom-left-radius: 5px;
+          border-bottom-right-radius: 5px;
+      }
+      .footer {
+          height: 40px;
+          background-color: whiteSmoke;
+          border-top: 1px solid #DDD;
+          -webkit-border-bottom-left-radius: 5px;
+          -webkit-border-bottom-right-radius: 5px;
+          -moz-border-radius-bottomleft: 5px;
+          -moz-border-radius-bottomright: 5px;
+          border-bottom-left-radius: 5px;
+          border-bottom-right-radius: 5px;
+      }
+      </style>
+      </head>
+      <body>
+      <h4>Hi '.$email.',</h4><br>
+      <div class="container">
+      <div class="header">
+      <span style="position:relative;top:4px;font-size: 25px;"><strong>'.$comic_data->safe_title.'<strong></span>
+      </div>
+      <div class="mainbody" style="margin-top:5px;margin-left: 7px;">
+          <img src='.$comic_data->img.' style="height:400px;width:96%;">
+          <p>'.$comic_body.'</p>
+      </div>
+      <div class="footer">
+          <h3>This Comic was released on '.$rel_date.'</h3>
+      </div>
+      </div>
+      <div style="margin-left:13px;">If you would prefer not to receive comics in future from us
+      <a href="https://'.$_SERVER['HTTP_HOST'].'/unsubscribe.php?email='.$email.'&token='.$hash.'" style="color:red">unsubscribe here.</a></div>
+      </body>
+      </html>
+      
+      ';
 
-  $date=date_create($release_date);
-  $rel_date=date_format($date,"l, F jS, Y");
-  try {	
-    $mail->addAddress($email);
+      $mail->Body = $message;
+      $mail->send();
+      $mail->clearAttachments();
+      $mail->ClearAllRecipients();
+  } catch (Exception $e) {
+      echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+  }
     
-    $message = '
-
-    <html>
-    <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        .container {
-        width: 500px;
-        margin: 10px;
-        border: 1px solid #fff;
-        background-color: #ffffff;
-        box-shadow: 0px 2px 7px #292929;
-        -moz-box-shadow: 0px 2px 7px #292929;
-        -webkit-box-shadow: 0px 2px 7px #292929;
-        border-radius: 10px;
-        -moz-border-radius: 10px;
-        -webkit-border-radius: 10px;
-    }
-    .mainbody,
-    .header,
-    .footer {
-        padding: 5px;
-    }
-    .mainbody {
-        margin-top: 5px;
-    }
-    .header {
-        text-align:center;
-        min-height: 40px;
-        height: auto;
-        width: 100%;
-        resize: both;
-        overflow: auto;
-        background-color: whiteSmoke;
-        border-bottom: 1px solid #DDD;
-        border-bottom-left-radius: 5px;
-        border-bottom-right-radius: 5px;
-    }
-    .footer {
-        height: 40px;
-        background-color: whiteSmoke;
-        border-top: 1px solid #DDD;
-        -webkit-border-bottom-left-radius: 5px;
-        -webkit-border-bottom-right-radius: 5px;
-        -moz-border-radius-bottomleft: 5px;
-        -moz-border-radius-bottomright: 5px;
-        border-bottom-left-radius: 5px;
-        border-bottom-right-radius: 5px;
-    }
-    </style>
-    </head>
-    <body>
-    <h4>Hi '.$email.',</h4><br>
-    <div class="container">
-    <div class="header">
-    <span style="position:relative;top:4px;font-size: 25px;"><strong>'.$comic_data->safe_title.'<strong></span>
-    </div>
-    <div class="mainbody" style="margin-top:5px;margin-left: 7px;">
-        <img src='.$comic_data->img.' style="height:400px;width:96%;">
-        <p>'.$comic_body.'</p>
-    </div>
-    <div class="footer">
-        <h3>This Comic was released on '.$rel_date.'</h3>
-    </div>
-    </div>
-    <div style="margin-left:13px;">If you would prefer not to receive comics in future from us
-    <a href="https://'.$_SERVER['HTTP_HOST'].'/unsubscribe.php?email='.$email.'&token='.$hash.'" style="color:red">unsubscribe here.</a></div>
-    </body>
-    </html>
-    
-    ';
-
-    $mail->Body = $message;
-    $mail->send();
-    $mail->clearAttachments();
-    $mail->ClearAllRecipients();
-} catch (Exception $e) {
-    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-}
-  
-  ?>
-<div class="wrapperAlert">
-<div class="contentAlert">
-  <div class="topHalf">
-
-    <p><svg viewBox="0 0 512 512" width="100" title="check-circle">
-      <path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z" />
-      </svg></p>
-    <h1>Congratulations</h1>
-
-   <ul class="bg-bubbles">
-     <li></li>
-     <li></li>
-     <li></li>
-     <li></li>
-     <li></li>
-     <li></li>
-     <li></li>
-     <li></li>
-     <li></li>
-     <li></li>
-   </ul>
-  </div>
-
-  <div class="bottomHalf">
-
-    <p>Your email is successfully verified! you will start receiving comics on your email shortly.</p>
-
-  </div>
-
-</div>        
-
-</div>
-<?php } elseif($isalrdyact and !$hash_error){ ?>
-
+    ?>
   <div class="wrapperAlert">
-<div class="contentAlert">
-  <div class="topHalf">
+  <div class="contentAlert">
+    <div class="topHalf">
 
-    <p><svg viewBox="0 0 512 512" width="100" title="check-circle">
-      <path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z" />
-      </svg></p>
-    <h1>Already verified</h1>
+      <p><svg viewBox="0 0 512 512" width="100" title="check-circle">
+        <path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z" />
+        </svg></p>
+      <h1>Congratulations</h1>
 
-   <ul class="bg-bubbles">
-     <li></li>
-     <li></li>
-     <li></li>
-     <li></li>
-     <li></li>
-     <li></li>
-     <li></li>
-     <li></li>
-     <li></li>
-     <li></li>
-   </ul>
-  </div>
+    <ul class="bg-bubbles">
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+    </div>
 
-  <div class="bottomHalf">
+    <div class="bottomHalf">
 
-    <p>You are already receiving comics from us, if you don’t find them please check your spam folder.</p>
+      <p>Your email is successfully verified! you will start receiving comics in your email shortly.</p>
 
-  </div>
+    </div>
 
-</div>        
-
-</div>
-<?php } else{ ?>
-<div class="wrapperAlert">
-
-<div class="contentAlert">
-
-  <div class="topHalff">
-
-    <p>
-        <svg xmlns="http://www.w3.org/2000/svg" width="90" height="90" viewBox="0 0 24 24">
-        <path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"/></svg>
-    </p>
-    <h1>Error Occured</h1>
-
-   <ul class="bg-bubbles">
-     <li></li>
-     <li></li>
-     <li></li>
-     <li></li>
-     <li></li>
-     <li></li>
-     <li></li>
-     <li></li>
-     <li></li>
-     <li></li>
-   </ul>
-  </div>
-
-  <div class="bottomHalf">
-
-    <p>Some error occured! Please try again.</p>
+  </div>        
 
   </div>
+  <?php } elseif($is_active and !$hash_error){ ?>
 
-</div>        
+    <div class="wrapperAlert">
+  <div class="contentAlert">
+    <div class="topHalf">
 
-</div>
+      <p><svg viewBox="0 0 512 512" width="100" title="check-circle">
+        <path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z" />
+        </svg></p>
+      <h1>Already verified</h1>
 
+    <ul class="bg-bubbles">
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+    </div>
+
+    <div class="bottomHalf">
+
+      <p>You are already receiving comics from us, if you don’t find them please check your spam folder.</p>
+
+    </div>
+
+  </div>        
+
+  </div>
+  <?php } else{ ?>
+  <div class="wrapperAlert">
+
+  <div class="contentAlert">
+
+    <div class="topHalff">
+
+      <p>
+          <svg xmlns="http://www.w3.org/2000/svg" width="90" height="90" viewBox="0 0 24 24">
+          <path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"/></svg>
+      </p>
+      <h1>Error Occured</h1>
+
+    <ul class="bg-bubbles">
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+    </div>
+
+    <div class="bottomHalf">
+
+      <p>Some error occured! Please try again.</p>
+
+    </div>
+
+  </div>        
+
+  </div>
+
+<?php }} else{?>
+  <div class="wrapperAlert">
+
+  <div class="contentAlert">
+
+    <div class="topHalff">
+
+      <p>
+          <svg xmlns="http://www.w3.org/2000/svg" width="90" height="90" viewBox="0 0 24 24">
+          <path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"/></svg>
+      </p>
+      <h1>Error Occured</h1>
+
+    <ul class="bg-bubbles">
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+    </div>
+
+    <div class="bottomHalf">
+
+      <p>Some error occured! Please try again.</p>
+
+    </div>
+
+  </div>        
+
+  </div>
 <?php }?>
 </body>
 </html>

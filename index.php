@@ -4,8 +4,12 @@ require_once __DIR__.'/config.php';
 if (isset($_POST['register'])) {
     $message='';
     $email = $_POST['email'];
+
+    // Removing the illegal characters from email
     $email = filter_var($email, FILTER_SANITIZE_EMAIL);
-    if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
+    //Validating email
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
       $sql = "SELECT * FROM users WHERE email='$email'";
       $result = $conn->query($sql);
 
@@ -16,13 +20,12 @@ if (isset($_POST['register'])) {
           }
           else{
               $hash = md5( rand(0,1000) );
-              $sql = "UPDATE users SET hash = ? WHERE email = '$email'";
+              $sql = 'UPDATE users SET hash = ? WHERE email = ?';
               $stmt = $conn->prepare($sql);
-              $stmt->bind_param("s", $hash);
+              $stmt->bind_param("ss", $hash, $email);
               $result = $stmt->execute();							
               $mail->Subject = 'Please verify your account!';
               try {
-          
                   $mail->addAddress($email);
                   
                   $emessage = '
@@ -294,21 +297,20 @@ if (isset($_POST['register'])) {
               } catch (Exception $e) {
                   echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
               }
-              $message = 'For receiving comics, please click on the link received on your email.';
+              $message = 'For receiving comics, please click on the link received in your email.';
           }
       } 
 
       else {
           $hash = md5( rand(0,1000) );
-          $sql = "INSERT INTO users(`email`, `hash`) VALUES (?,?)";
+          $sql = 'INSERT INTO users(`email`, `hash`) VALUES (?,?)';
           $stmt = $conn->prepare($sql);
           $stmt->bind_param("ss", $email, $hash);
           $result = $stmt->execute();;
           if($result){
 
             $mail->Subject = 'Confirm your Email';
-            try {	
-        
+            try {
                 $mail->addAddress($email);
                 
                 $emessage = '
