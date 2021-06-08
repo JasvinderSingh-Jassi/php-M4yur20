@@ -4,8 +4,10 @@ $eflag=false;
 if (isset($_POST['email']) and $_POST['token']){
     $email = $_POST['email'];
     $token = $_POST['token'];
+    // Removing the illegal characters from email
     $email = filter_var($email, FILTER_SANITIZE_EMAIL);
-    if(filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    //Validating
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
       $eflag = false;
       $sql = "SELECT * FROM users WHERE email='$email'";
       $result = $conn->query($sql);
