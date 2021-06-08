@@ -1,7 +1,8 @@
 
 <?php
 require_once __DIR__.'/config.php';
-$sql = "SELECT * FROM users WHERE is_active=1";
+require __DIR__.'/helperfuncs.php';
+$sql = 'SELECT * FROM users WHERE is_active=1';
 $result = $conn->query($sql);
 $emails = array();
 $hashes = array();
@@ -10,24 +11,8 @@ while ($row = $result->fetch_assoc()) {
     array_push($hashes,$row['hash']);
 }
 
-function getSiteOG($url, $specificTags=0){
-    $doc = new DOMDocument();
-    @$doc->loadHTML(file_get_contents($url));
-    $res['title'] = $doc->getElementsByTagName('title')->item(0)->nodeValue;
-    foreach ($doc->getElementsByTagName('meta') as $m){
-        $tag = $m->getAttribute('name') ?: $m->getAttribute('property');
-        if(in_array($tag,['description','keywords']) || strpos($tag,'og:')===0) $res[str_replace('og:','',$tag)] = $m->getAttribute('content');
-    }
-    return $specificTags? array_intersect_key( $res, array_flip($specificTags) ) : $res;
-}
 
-
-$urldata = getSiteOG("https://c.xkcd.com/random/comic/");
-$url = $urldata['url'];
-
-$urlpath = parse_url($url);
-$comic_id = str_replace('/', '', $urlpath['path']);
-
+$comic_id = getRandomComicId('https://c.xkcd.com/random/comic/');
 $api_url = 'https://xkcd.com/'.$comic_id.'/info.0.json';
 
 // GET Request
@@ -43,17 +28,17 @@ $day = $comic_data->day;
 $year = $comic_data->year;
 
 $release_date_ts=strtotime("$year-$month-$day");
-$release_date=date("Y-m-d",$release_date_ts);
+$release_date=date('Y-m-d',$release_date_ts);
 
 $date=date_create($release_date);
-$rel_date=date_format($date,"l, F jS, Y");
+$rel_date=date_format($date,'l, F jS, Y');
 if(!$_SERVER['HTTP_HOST']){
     $_SERVER['HTTP_HOST'] = 'calm-journey-40539.herokuapp.com';
 }
 
 for($i=0; $i<count($emails); $i++){ 
     try {		
-        
+
         $mail->addAddress($emails[$i]);
         
         $message = '
@@ -135,7 +120,7 @@ for($i=0; $i<count($emails); $i++){
         $mail->send();
         $mail->clearAttachments();
         $mail->ClearAllRecipients();
-        echo "Mail has been sent successfully!";
+        echo 'Mail has been sent successfully!';
     } catch (Exception $e) {
         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
     }
