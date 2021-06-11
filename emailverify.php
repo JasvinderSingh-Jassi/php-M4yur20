@@ -196,6 +196,7 @@ require_once __DIR__.'/config.php';
 require __DIR__.'/helperfuncs.php';
 $email=$_GET['email'];
 $hash=$_GET['hash'];
+$link = getLink();
 
 // Removing the illegal characters from email
 $email = filter_var($email, FILTER_SANITIZE_EMAIL);
@@ -244,10 +245,11 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
     $year = $comic_data->year;
 
     $release_date_ts=strtotime("$year-$month-$day");
-    $release_date=date("Y-m-d",$release_date_ts);
+    $release_date=date('Y-m-d',$release_date_ts);
 
     $date=date_create($release_date);
     $rel_date=date_format($date,"l, F jS, Y");
+
     try {	
       $mail->addAddress($email);
       
@@ -320,7 +322,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
       </div>
       </div>
       <div style="margin-left:13px;">If you would prefer not to receive comics in future from us
-      <a href="https://'.$_SERVER['HTTP_HOST'].'/unsubscribe.php?email='.$email.'&token='.$hash.'" style="color:red">unsubscribe here.</a></div>
+      <a href="'.$link.'/unsubscribe.php?email='.$email.'&token='.$hash.'" style="color:red">unsubscribe here.</a></div>
       </body>
       </html>
       
@@ -360,7 +362,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
 
     <div class="bottomHalf">
 
-      <p>Your email is successfully verified! you will start receiving comics in your email shortly.</p>
+      <p>Your email is successfully verified! You will start receiving comics in your email shortly.</p>
 
     </div>
 
@@ -412,7 +414,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
           <svg xmlns="http://www.w3.org/2000/svg" width="90" height="90" viewBox="0 0 24 24">
           <path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"/></svg>
       </p>
-      <h1>Error Occured</h1>
+      <h1>Error Occurred</h1>
 
     <ul class="bg-bubbles">
       <li></li>
@@ -430,7 +432,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
 
     <div class="bottomHalf">
 
-      <p>Some error occured! Please try again.</p>
+      <p>Some error occurred! Please try again.</p>
 
     </div>
 
@@ -449,7 +451,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
           <svg xmlns="http://www.w3.org/2000/svg" width="90" height="90" viewBox="0 0 24 24">
           <path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"/></svg>
       </p>
-      <h1>Error Occured</h1>
+      <h1>Error Occurred</h1>
 
     <ul class="bg-bubbles">
       <li></li>
@@ -467,7 +469,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
 
     <div class="bottomHalf">
 
-      <p>Some error occured! Please try again.</p>
+      <p>Some error occurred! Please try again.</p>
 
     </div>
 

@@ -1,9 +1,10 @@
 <?php
 require_once __DIR__.'/config.php';
-  
+require __DIR__.'/helperfuncs.php';
 if (isset($_POST['register'])) {
     $message='';
     $email = $_POST['email'];
+    $link = getLink();
 
     // Removing the illegal characters from email
     $email = filter_var($email, FILTER_SANITIZE_EMAIL);
@@ -12,7 +13,7 @@ if (isset($_POST['register'])) {
     if (!filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
       $sql = "SELECT * FROM users WHERE email='$email'";
       $result = $conn->query($sql);
-
+      
       if ($result->num_rows >= 1) {
           $row = $result->fetch_assoc();
           if($row['is_active']=='1'){
@@ -263,7 +264,7 @@ if (isset($_POST['register'])) {
                                                 <table border="0" cellpadding="0" cellspacing="0">
                                                   <tbody>
                                                     <tr>
-                                                      <td> <a href="https://'.$_SERVER['HTTP_HOST'].'/emailverify.php?email='.$email.'&hash='.$hash.'" target="_blank">confirm email</a> </td>
+                                                      <td> <a href="'.$link.'/emailverify.php?email='.$email.'&hash='.$hash.'" target="_blank">confirm email</a> </td>
                                                     </tr>
                                                   </tbody>
                                                 </table>
@@ -547,7 +548,7 @@ if (isset($_POST['register'])) {
                                                 <table border="0" cellpadding="0" cellspacing="0">
                                                   <tbody>
                                                     <tr>
-                                                      <td> <a href="https://'.$_SERVER['HTTP_HOST'].'/emailverify.php?email='.$email.'&hash='.$hash.'" target="_blank">confirm email</a> </td>
+                                                      <td> <a href="'.$link.'/emailverify.php?email='.$email.'&hash='.$hash.'" target="_blank">confirm email</a> </td>
                                                     </tr>
                                                   </tbody>
                                                 </table>
@@ -594,7 +595,7 @@ if (isset($_POST['register'])) {
 ?>
 <html>
     <head>
-        <title>Registartion Form</title>
+        <title>Registration Form</title>
         <link rel="stylesheet" href="style.css">
         
     </head>

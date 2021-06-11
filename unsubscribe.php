@@ -1,5 +1,7 @@
 <?php
 require_once __DIR__.'/config.php';
+require __DIR__.'/helperfuncs.php';
+$link = getLink();
 $eflag=false;
 if (isset($_POST['email']) and $_POST['token']){
     $email = $_POST['email'];
@@ -39,10 +41,6 @@ if (isset($_POST['email']) and $_POST['token']){
         }
       } 
     }
-    
-  else{
-    $eflag=true;
-  }
 }
 ?>
 
@@ -176,7 +174,7 @@ td,
                   	</div>
                   </form>
                   <br>
-                  <a href="https://<?php echo $_SERVER["HTTP_HOST"]; ?>">« Return to our website</a>
+                  <a href="<?php echo $link; ?>">« Return to our website</a>
                 </div>
               </td>
             </tr>
@@ -199,10 +197,10 @@ td,
                 <div id="templateBody" class="bodyContent rounded6">
                   <input type="hidden" name="email" value="<?php echo $_GET["email"]; ?>">
                   <div class="groups">
-                    <h3>Some error occured! Please try again</h3>
+                    <h3>Some error occurred! Please try again</h3>
                   </div>
                   <br>
-                  <a href="https://<?php echo $_SERVER['HTTP_HOST']; ?>">« Return to our website</a>
+                  <a href="<?php echo $link; ?>">« Return to our website</a>
                 </div>
               </td>
             </tr>
