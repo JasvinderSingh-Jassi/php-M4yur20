@@ -1,12 +1,12 @@
 <?php
-$idpasserr=false;
+$idpass_err=false;
 if(defined('STDIN')){
     if(isset($argv[1]) and isset($argv[2])){
         $id = $argv[1];
         $password = $argv[2];
     }
     else{
-        $idpasserr=true;
+        $idpass_err=true;
         echo 'Enter id and password then try again.';
     }
 } 
@@ -151,7 +151,7 @@ if(isset($id) and isset($password))
     }
 }
 else{
-    if(!$idpasserr){
+    if(!$idpass_err){
         echo 'Access Denied';
     }
 }
